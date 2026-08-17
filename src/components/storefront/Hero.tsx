@@ -34,16 +34,16 @@ export function Hero() {
         <h1 className="sr-only">מגש פירות שהופך כל רגע לחגיגה</h1>
 
         <Image
-          src="/images/hero-banner-full.png"
+          src="/images/hero-banner-transparent.png"
           alt="מגש פירות שהופך כל רגע לחגיגה - פירות טריים, חיתוך מוקפד ומשלוח עד הדלת"
-          width={1536}
-          height={1024}
+          width={1930}
+          height={815}
           priority
           sizes="(max-width: 1280px) 100vw, 1280px"
-          className="w-full h-auto rounded-3xl shadow-sm"
+          className="w-full h-auto"
         />
 
-        <div className="flex flex-col items-center text-center gap-5 max-w-2xl bg-cream/55 backdrop-blur-md rounded-3xl px-8 py-6">
+        <div className="flex flex-col items-center text-center gap-5 max-w-2xl">
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <Link
               href="/products"

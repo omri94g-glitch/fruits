@@ -85,24 +85,33 @@ the same ink color as a heading, just smaller/regular-weight.
   on text, buttons, or UI chrome elsewhere — those stay on the disciplined
   token palette above.
 - **Hero banner image**: inside that section, `Hero.tsx` renders one
-  full-width image (`public/images/hero-banner-full.png`, 1536×1024) with the
-  headline baked into the graphic instead of separate eyebrow/h1/subtitle DOM
-  text. This is an AI-generated example banner the user supplied directly,
-  used as-is at their explicit call — it includes its own baked-in "R FRUITS"
-  cartoon logo mark, which sits alongside the real header wordmark logo rather
-  than replacing it; this is a known, deliberate inconsistency the user chose
-  to keep, not an oversight. Swap for real photography/graphic design later.
-  Because the headline text lives inside the image, a real
-  `<h1 className="sr-only">` with the same copy stays in the DOM for
-  accessibility/SEO, and the `<Image>` gets full descriptive `alt` text —
-  don't drop either when touching this component.
-- **CTA glass panel**: the button row + trust checklist sit inside a
-  `bg-cream/55 backdrop-blur-md rounded-3xl` panel rather than plain page
-  background — CSS glassmorphism, not another embedded image, so it doesn't
-  duplicate the `cta-frame.png` texture already filling the section behind it.
-  Button styling itself (pill shape, green-700/outline fills) is unchanged.
-  Don't generalize this glass-panel treatment to other buttons site-wide —
-  it's a hero-specific flourish, not a new default button treatment.
+  full-width image (`public/images/hero-banner-transparent.png`, 1930×815,
+  true alpha transparency) with the headline baked into the graphic instead of
+  separate eyebrow/h1/subtitle DOM text — only the logo/fruit-corner/text
+  artwork is opaque, so the fixed `cta-frame.png`/`hero-bg-mobile.png`
+  background behind it shows through and the two read as one continuous
+  backdrop instead of a card sitting on a card. This started as an
+  AI-generated banner with an opaque marble background and a checkerboard
+  ("transparent") export that turned out to have no real alpha channel (flat
+  gray/white pixels baked in, confirmed via PIL — `sips`/most viewers render
+  a checkerboard for missing alpha, so don't assume a "transparent" export
+  actually has one); we regenerated true transparency by color-keying out the
+  near-neutral, high-brightness checkerboard pixels (`spread<=4 & min>=225`)
+  and left everything else — including whites inside the artwork like
+  watermelon rind — opaque. If a similar "transparent" export ever looks
+  wrong, check for an alpha channel before trusting it. The image includes
+  its own baked-in "R FRUITS" cartoon logo mark, which sits alongside the
+  real header wordmark logo rather than replacing it; this is a known,
+  deliberate inconsistency the user chose to keep, not an oversight. Swap for
+  real photography/graphic design later. Because the headline text lives
+  inside the image, a real `<h1 className="sr-only">` with the same copy
+  stays in the DOM for accessibility/SEO, and the `<Image>` gets full
+  descriptive `alt` text — don't drop either when touching this component.
+- **CTA buttons sit directly on the fixed background** — no card/panel behind
+  them (an earlier `bg-cream/55 backdrop-blur-md` glass panel was removed at
+  the user's request to strip opaque white backgrounds from the hero).
+  Button styling itself (pill shape, green-700/outline fills) is unchanged
+  and stays legible directly against the light marble backdrop.
 
 ## Radius & elevation
 - **Pill** (`rounded-full`): every button, category filter chip, status badge,
