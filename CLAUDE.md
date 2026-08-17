@@ -39,10 +39,18 @@ Hierarchy comes from **size and weight**, not from graying out text. A price is
 the same ink color as a heading, just smaller/regular-weight.
 
 ## Typography
-- Serif (`--font-serif`, Frank Ruhl Libre): logo wordmark, all headings (h1–h3).
-  Weight 400–500. Tight leading (`leading-tight`).
-- Sans (`--font-sans`, Assistant): everything else — nav, body copy, buttons,
-  labels, prices, form inputs.
+- Serif (`--font-serif`, David Libre): logo wordmark, all headings (h1–h3).
+  Weight 400–500, occasional 700 for standout emphasis. Tight leading
+  (`leading-tight`) plus a touch of letter-spacing (`.font-serif { letter-spacing:
+  0.012em }` in `globals.css`) — David Libre's warmer, rounder ductus reads more
+  boutique/heritage than a literary book-serif, and the added tracking gives
+  headings a more delicate, editorial quality at display sizes. Replaced Frank
+  Ruhl Libre in a deliberate typography refresh — don't revert.
+- Sans (`--font-sans`, Rubik): everything else — nav, body copy, buttons,
+  labels, prices, form inputs. Rubik's soft, rounded terminals feel warmer and
+  more "designed" than a neutral grotesque, matching the handmade/premium brand
+  feel while staying highly legible for Hebrew UI text. Replaced Assistant in
+  the same refresh.
 - **Eyebrow label** pattern (e.g. "PREMIUM FRUIT PLATTERS", "Best Sellers"):
   uppercase Latin, `text-xs`, `tracking-[0.25em]`, `text-gold`. Always sits
   directly above a serif heading.

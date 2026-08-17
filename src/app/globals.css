@@ -27,11 +27,15 @@
   --color-gold: var(--color-gold);
   --color-gold-soft: var(--color-gold-soft);
   --color-line: var(--color-line);
-  --font-sans: var(--font-assistant);
-  --font-serif: var(--font-frank-ruhl);
+  --font-sans: var(--font-rubik);
+  --font-serif: var(--font-david-libre);
 }
 
 body {
   background: var(--color-cream);
   color: var(--color-ink);
+}
+
+.font-serif {
+  letter-spacing: 0.012em;
 }
