@@ -40,7 +40,7 @@ export function ProductCard({
           onClick={() => trackEvent("select_item", { product_id: productId, product_name: name })}
           className="block overflow-hidden rounded-2xl"
         >
-          <PlaceholderImage className="aspect-square w-full" />
+          <PlaceholderImage src={image} alt={name} className="aspect-square w-full" />
         </Link>
         {badges && badges.length > 0 && (
           <span className="absolute top-3 right-3 rounded-full bg-gold-soft text-ink text-xs px-3 py-1">

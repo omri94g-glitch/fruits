@@ -89,7 +89,7 @@ export function QuickOrderModal() {
           </div>
 
           <div className="p-5 flex flex-col gap-6">
-            <PlaceholderImage className="aspect-[16/9] rounded-2xl w-full" />
+            <PlaceholderImage src={product.image} alt={product.name} className="aspect-[16/9] rounded-2xl w-full" />
 
             {product.variants.length > 1 && (
               <div>

@@ -82,6 +82,7 @@ export default async function ProductsPage({
               name={p.name}
               description={p.description}
               fromPrice={Number(p.basePrice)}
+              image={p.images[0]}
               badges={p.badges}
               variants={p.variants.map((v) => ({
                 id: v.id,

@@ -26,7 +26,7 @@ export function CartItemsList() {
             key={`${item.productId}-${item.variantId}-${key}`}
             className="flex gap-4 border border-line rounded-2xl p-4"
           >
-            <PlaceholderImage className="w-20 h-20 rounded-xl shrink-0" />
+            <PlaceholderImage src={item.image} alt={item.name} className="w-20 h-20 rounded-xl shrink-0" />
 
             <div className="flex-1 min-w-0 flex flex-col gap-3">
               <div className="flex items-start justify-between gap-2">

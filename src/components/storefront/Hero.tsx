@@ -14,7 +14,8 @@ export function Hero() {
   return (
     <section className="mx-auto max-w-7xl px-4 pt-8 pb-16 grid md:grid-cols-2 gap-10 items-center">
       <PlaceholderImage
-        label="תמונת מגש פירות"
+        src="/images/tray-classic.png"
+        alt="מגש פירות טריים"
         className="aspect-square md:aspect-[4/5] rounded-3xl order-2"
       />
 

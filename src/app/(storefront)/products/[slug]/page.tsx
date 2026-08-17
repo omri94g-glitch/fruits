@@ -32,10 +32,20 @@ export default async function ProductPage({
     <div className="mx-auto max-w-5xl px-4 py-14">
       <div className="grid md:grid-cols-2 gap-12">
         <div className="flex flex-col gap-3">
-          <PlaceholderImage label={product.name} className="aspect-square rounded-3xl" />
+          <PlaceholderImage
+            src={product.images[0]}
+            alt={product.name}
+            label={product.name}
+            className="aspect-square rounded-3xl"
+          />
           <div className="grid grid-cols-3 gap-3">
-            {[1, 2, 3].map((i) => (
-              <PlaceholderImage key={i} className="aspect-square rounded-xl" />
+            {[0, 1, 2].map((i) => (
+              <PlaceholderImage
+                key={i}
+                src={product.images[i + 1] ?? product.images[i]}
+                alt={product.name}
+                className="aspect-square rounded-xl"
+              />
             ))}
           </div>
         </div>

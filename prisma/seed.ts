@@ -6,6 +6,13 @@ import { PrismaClient } from "../src/generated/prisma/client";
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const db = new PrismaClient({ adapter });
 
+// Example fruit-tray photos (AI-generated, provided by the client as visual
+// placeholders) - not real photos of Rfruits' actual product. Swap for real
+// photography before launch; this is purely to make the preview feel real.
+const IMG_CLASSIC = "/images/tray-classic.png";
+const IMG_TABLE = "/images/tray-table.png";
+const IMG_VEGGIE = "/images/tray-veggie.png";
+
 // Serving counts, dimensions, and included-items copy below are illustrative
 // placeholders (clearly example data) until the client supplies real product
 // specs. allergensInfo/kosherInfo use an honest "to be updated" placeholder
@@ -16,7 +23,7 @@ const products = [
     slug: "magash-klasi",
     name: "מגש פירות קלאסי",
     description: "מבחר פירות טריים ועונתיים, סידור קלאסי ואלגנטי המתאים לכל אירוע.",
-    images: ["/images/placeholder-tray-1.jpg"],
+    images: [IMG_CLASSIC, IMG_TABLE, IMG_VEGGIE],
     category: "מגשי פירות",
     occasionTags: ["יום הולדת", "אירוח ומשפחה", "מתנה מרגשת"],
     whatsIncluded: ["מבחר פירות טריים בעונה", "סידור וחיתוך ידני", "עטיפה מוקפדת"],
@@ -36,7 +43,7 @@ const products = [
     slug: "maarz-ishi",
     name: "מארז פירות אישי",
     description: "מארז קומפקטי לאדם אחד, אידיאלי למשרד או ארוחת ביניים בריאה.",
-    images: ["/images/placeholder-tray-2.jpg"],
+    images: [IMG_CLASSIC, IMG_VEGGIE, IMG_TABLE],
     category: "מארזי פירות",
     occasionTags: ["בריאות ופינוק"],
     whatsIncluded: ["מבחר פירות חתוכים טריים", "אריזה אישית נוחה לנשיאה"],
@@ -52,7 +59,7 @@ const products = [
     slug: "magash-gadol",
     name: "מגש פירות גדול",
     description: "מגש עשיר ומרשים לאירועים גדולים ומפגשים משפחתיים.",
-    images: ["/images/placeholder-tray-3.jpg"],
+    images: [IMG_TABLE, IMG_CLASSIC, IMG_VEGGIE],
     category: "מגשי פירות",
     occasionTags: ["אירוח ומשפחה", "אירועים ועסקים"],
     whatsIncluded: ["מבחר פירות טריים מורחב", "סידור וחיתוך ידני", "עטיפה מוקפדת"],
@@ -71,7 +78,7 @@ const products = [
     slug: "magash-eruah-yokrati",
     name: "מגש אירוח יוקרתי",
     description: "מגש פרימיום עם מבחר פירות אקזוטיים לאירוח ברמה גבוהה.",
-    images: ["/images/placeholder-tray-4.jpg"],
+    images: [IMG_TABLE, IMG_VEGGIE, IMG_CLASSIC],
     category: "אירועים ועסקים",
     occasionTags: ["אירועים ועסקים", "מתנה מרגשת"],
     whatsIncluded: ["מבחר פירות אקזוטיים", "סידור פרימיום ידני", "עטיפה מפוארת"],
@@ -87,7 +94,7 @@ const products = [
     slug: "magash-briut-tivoni",
     name: "מגש בריאות / טבעוני",
     description: "מגש פירות וירקות טבעוני, מתאים לתפריטים בריאים ולדרישות תזונתיות מיוחדות.",
-    images: ["/images/placeholder-tray-5.jpg"],
+    images: [IMG_VEGGIE, IMG_CLASSIC, IMG_TABLE],
     category: "מגשי פירות",
     occasionTags: ["בריאות ופינוק"],
     whatsIncluded: ["מבחר פירות וירקות טריים", "ללא תוספת סוכר"],
@@ -112,6 +119,7 @@ async function main() {
     await db.product.upsert({
       where: { slug: p.slug },
       update: {
+        images: p.images,
         occasionTags: p.occasionTags,
         whatsIncluded: p.whatsIncluded,
         dimensions: p.dimensions,
