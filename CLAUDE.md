@@ -66,19 +66,24 @@ the same ink color as a heading, just smaller/regular-weight.
   original rhythm read as too much dead air between sections on both mobile
   and desktop.
 - Card/grid gap: `gap-6` for product grids, `gap-4` for tight lists.
-- **Hero section background**: `Hero.tsx`'s `<section>` is `relative overflow-
-  hidden` with a full-bleed `absolute inset-0 -z-10` background layer — a
-  marble/fruit-corner photo (`public/images/cta-frame.png` on `sm:` and up,
-  `public/images/hero-bg-mobile.png`, a portrait crop, below `sm`), both
-  user-supplied AI graphics used uncropped per their standing preference. This
-  is the one deliberate departure from the otherwise fully neutral cream/ink/
-  green/gold palette, added because the site read as too monochrome without
-  it. Because the background is `absolute` (scoped to the Hero section's own
-  box, not viewport-`fixed`), it cannot bleed into sections below regardless
-  of their own background — no need to give adjacent sections an explicit
-  opaque background to "cover" it. Keep photographic color accents contained
-  to this backdrop, never as a fill on text, buttons, or UI chrome elsewhere —
-  those stay on the disciplined token palette above.
+- **Hero section background**: `Hero.tsx` has a full-bleed `fixed inset-0
+  -z-10` background layer — a marble/fruit-corner photo
+  (`public/images/cta-frame.png` on `sm:` and up, `public/images/hero-bg-
+  mobile.png`, a portrait crop, below `sm`), both user-supplied AI graphics
+  used uncropped per their standing preference. It's truly viewport-`fixed`
+  (static, doesn't scroll with the page) at the user's explicit request —
+  not `absolute`/section-scoped. This is the one deliberate departure from
+  the otherwise fully neutral cream/ink/green/gold palette, added because the
+  site read as too monochrome without it. **Because it's `fixed`, every
+  section that can scroll past it needs its own opaque background** or the
+  image bleeds through — `(storefront)/page.tsx` wraps everything after
+  `<Hero />` in a single `<div className="relative bg-cream">`, and
+  `Header`/`Footer` already carry their own opaque backgrounds (`bg-cream`
+  sticky header, `bg-green-900` footer) so they mask it too. If you add a new
+  top-level section to the homepage, make sure it's covered by that wrapper.
+  Keep photographic color accents contained to this backdrop, never as a fill
+  on text, buttons, or UI chrome elsewhere — those stay on the disciplined
+  token palette above.
 - **Hero banner image**: inside that section, `Hero.tsx` renders one
   full-width image (`public/images/hero-banner-full.png`, 1536×1024) with the
   headline baked into the graphic instead of separate eyebrow/h1/subtitle DOM

@@ -12,8 +12,8 @@ const trustItems = [
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0 -z-10" aria-hidden="true">
+    <section className="relative">
+      <div className="fixed inset-0 -z-10" aria-hidden="true">
         <Image
           src="/images/hero-bg-mobile.png"
           alt=""

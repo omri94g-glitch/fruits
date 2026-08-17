@@ -16,14 +16,16 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <OccasionNav />
-      <BestSellers />
-      <HowItArrives />
-      <FeatureStrip />
-      <Reviews />
-      <EventsBusinessBand />
-      <FAQ />
-      <FinalCTA />
+      <div className="relative bg-cream">
+        <OccasionNav />
+        <BestSellers />
+        <HowItArrives />
+        <FeatureStrip />
+        <Reviews />
+        <EventsBusinessBand />
+        <FAQ />
+        <FinalCTA />
+      </div>
     </>
   );
 }
