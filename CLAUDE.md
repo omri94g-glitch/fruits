@@ -67,13 +67,24 @@ the same ink color as a heading, just smaller/regular-weight.
   and desktop.
 - Card/grid gap: `gap-6` for product grids, `gap-4` for tight lists.
 - **Hero color accent**: a single soft, blurred multi-stop gradient glow
-  (coral/mango/olive tones sampled from real fruit) sits behind the hero photo
-  only (`Hero.tsx`, `-inset-6 blur-3xl opacity-70`, `-z-10`) — the one
+  (coral/mango/olive tones sampled from real fruit) sits behind the hero banner
+  image only (`Hero.tsx`, `-inset-6 blur-3xl opacity-70`, `-z-10`) — the one
   deliberate departure from the otherwise fully neutral cream/ink/green/gold
   palette, added because the site read as too monochrome without it. Keep this
   contained to decorative backdrops behind photography, never as a fill on
   text, buttons, or UI chrome — those stay on the disciplined token palette
   above.
+- **Hero banner image**: `Hero.tsx` renders one full-width image
+  (`public/images/hero-banner.png`) with the headline baked into the graphic
+  instead of separate eyebrow/h1/subtitle DOM text. This is an AI-generated
+  example banner the user supplied directly (cropped by us to remove a
+  conflicting secondary "R FRUITS" cartoon logo baked into the original —
+  the site has exactly one logo, the serif wordmark in the header; never
+  reintroduce a second logo mark anywhere). Swap for real photography/graphic
+  design later. Because the headline text lives inside the image, a real
+  `<h1 className="sr-only">` with the same copy stays in the DOM for
+  accessibility/SEO, and the `<Image>` gets full descriptive `alt` text — don't
+  drop either when touching this component.
 
 ## Radius & elevation
 - **Pill** (`rounded-full`): every button, category filter chip, status badge,

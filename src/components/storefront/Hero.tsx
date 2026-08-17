@@ -1,6 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Check } from "lucide-react";
-import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 const trustItems = [
@@ -12,33 +12,31 @@ const trustItems = [
 
 export function Hero() {
   return (
-    <section className="mx-auto max-w-7xl px-4 pt-8 pb-12 grid md:grid-cols-2 gap-10 items-center">
-      <div className="relative order-2">
+    <section className="mx-auto max-w-7xl px-4 pt-8 pb-12 flex flex-col items-center gap-8">
+      <h1 className="sr-only">מגש פירות שהופך כל רגע לחגיגה</h1>
+
+      <div className="relative w-full">
         <div
           aria-hidden="true"
           className="absolute -inset-6 -z-10 rounded-[2.5rem] opacity-70 blur-3xl"
           style={{
             background:
-              "radial-gradient(circle at 25% 20%, #F4A25F 0%, transparent 55%), radial-gradient(circle at 80% 30%, #C3543E 0%, transparent 50%), radial-gradient(circle at 50% 85%, #7A8F3D 0%, transparent 55%)",
+              "radial-gradient(circle at 15% 20%, #F4A25F 0%, transparent 50%), radial-gradient(circle at 85% 25%, #C3543E 0%, transparent 45%), radial-gradient(circle at 50% 90%, #7A8F3D 0%, transparent 50%)",
           }}
         />
-        <PlaceholderImage
-          src="/images/tray-classic.png"
-          alt="מגש פירות טריים"
-          className="relative aspect-square md:aspect-[4/5] rounded-3xl"
+        <Image
+          src="/images/hero-banner.png"
+          alt="מגש פירות שהופך כל רגע לחגיגה - פירות טריים, חיתוך מוקפד ומשלוח עד הדלת"
+          width={1536}
+          height={634}
+          priority
+          sizes="(max-width: 1280px) 100vw, 1280px"
+          className="relative w-full h-auto rounded-3xl"
         />
       </div>
 
-      <div className="order-1 flex flex-col items-center md:items-start text-center md:text-right gap-5">
-        <span className="text-xs tracking-[0.25em] text-gold uppercase">
-          Premium Fruit Platters
-        </span>
-        <h1 className="font-serif text-4xl md:text-5xl leading-tight text-ink">
-          מגש פירות שהופך כל רגע לחגיגה
-        </h1>
-        <p className="text-ink-muted">פירות טריים, חיתוך מוקפד ומשלוח עד הדלת</p>
-
-        <div className="flex flex-col sm:flex-row gap-3 pt-2 w-full sm:w-auto">
+      <div className="flex flex-col items-center text-center gap-5 max-w-2xl">
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <Link
             href="/products"
             className="rounded-full bg-green-700 text-cream px-8 py-3 text-sm text-center hover:bg-green-600 transition-colors"
@@ -55,7 +53,7 @@ export function Hero() {
           </a>
         </div>
 
-        <ul className="flex flex-wrap justify-center md:justify-start gap-x-5 gap-y-2 pt-2">
+        <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2">
           {trustItems.map((item) => (
             <li key={item} className="flex items-center gap-1.5 text-xs text-ink-muted">
               <Check size={14} className="text-green-700 shrink-0" />
