@@ -64,17 +64,29 @@ export default async function AdminOrderDetailPage({
       <section className="flex flex-col gap-3">
         <h2 className="font-medium text-sm">פריטים</h2>
         <div className="rounded-2xl border border-line overflow-hidden">
-          {order.items.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center justify-between px-4 py-3 text-sm border-b border-line last:border-b-0"
-            >
-              <span>
-                {item.nameSnapshot} × {item.quantity}
-              </span>
-              <span>{Number(item.unitPrice) * item.quantity} ₪</span>
-            </div>
-          ))}
+          {order.items.map((item) => {
+            const addOns = Array.isArray(item.addOns)
+              ? (item.addOns as { id: string; label: string; price: number }[])
+              : [];
+            return (
+              <div
+                key={item.id}
+                className="flex items-center justify-between px-4 py-3 text-sm border-b border-line last:border-b-0"
+              >
+                <div>
+                  <span>
+                    {item.nameSnapshot} × {item.quantity}
+                  </span>
+                  {addOns.length > 0 && (
+                    <div className="text-xs text-ink-muted mt-1">
+                      תוספות: {addOns.map((a) => a.label).join(", ")}
+                    </div>
+                  )}
+                </div>
+                <span>{Number(item.unitPrice) * item.quantity} ₪</span>
+              </div>
+            );
+          })}
           <div className="flex items-center justify-between px-4 py-3 text-sm bg-cream-alt font-medium">
             <span>סה&quot;כ</span>
             <span>{Number(order.totalAmount)} ₪</span>
