@@ -25,10 +25,10 @@ export function Hero() {
           }}
         />
         <Image
-          src="/images/hero-banner.png"
+          src="/images/hero-banner-full.png"
           alt="מגש פירות שהופך כל רגע לחגיגה - פירות טריים, חיתוך מוקפד ומשלוח עד הדלת"
           width={1536}
-          height={634}
+          height={1024}
           priority
           sizes="(max-width: 1280px) 100vw, 1280px"
           className="relative w-full h-auto rounded-3xl"

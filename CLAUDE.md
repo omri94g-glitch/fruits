@@ -75,15 +75,16 @@ the same ink color as a heading, just smaller/regular-weight.
   text, buttons, or UI chrome — those stay on the disciplined token palette
   above.
 - **Hero banner image**: `Hero.tsx` renders one full-width image
-  (`public/images/hero-banner.png`) with the headline baked into the graphic
-  instead of separate eyebrow/h1/subtitle DOM text. This is an AI-generated
-  example banner the user supplied directly (cropped by us to remove a
-  conflicting secondary "R FRUITS" cartoon logo baked into the original —
-  the site has exactly one logo, the serif wordmark in the header; never
-  reintroduce a second logo mark anywhere). Swap for real photography/graphic
-  design later. Because the headline text lives inside the image, a real
-  `<h1 className="sr-only">` with the same copy stays in the DOM for
-  accessibility/SEO, and the `<Image>` gets full descriptive `alt` text — don't
+  (`public/images/hero-banner-full.png`, 1536×1024) with the headline baked into
+  the graphic instead of separate eyebrow/h1/subtitle DOM text. This is an
+  AI-generated example banner the user supplied directly, used as-is at their
+  explicit call — it includes its own baked-in "R FRUITS" cartoon logo mark,
+  which sits alongside the real header wordmark logo rather than replacing it;
+  this is a known, deliberate inconsistency the user chose to keep, not an
+  oversight. Swap for real photography/graphic design later. Because the
+  headline text lives inside the image, a real `<h1 className="sr-only">`
+  with the same copy stays in the DOM for accessibility/SEO, and the
+  `<Image>` gets full descriptive `alt` text — don't
   drop either when touching this component.
 
 ## Radius & elevation
