@@ -66,37 +66,38 @@ the same ink color as a heading, just smaller/regular-weight.
   original rhythm read as too much dead air between sections on both mobile
   and desktop.
 - Card/grid gap: `gap-6` for product grids, `gap-4` for tight lists.
-- **Hero color accent**: a single soft, blurred multi-stop gradient glow
-  (coral/mango/olive tones sampled from real fruit) sits behind the hero banner
-  image only (`Hero.tsx`, `-inset-6 blur-3xl opacity-70`, `-z-10`) — the one
-  deliberate departure from the otherwise fully neutral cream/ink/green/gold
-  palette, added because the site read as too monochrome without it. Keep this
-  contained to decorative backdrops behind photography, never as a fill on
-  text, buttons, or UI chrome — those stay on the disciplined token palette
-  above.
-- **Hero banner image**: `Hero.tsx` renders one full-width image
-  (`public/images/hero-banner-full.png`, 1536×1024) with the headline baked into
-  the graphic instead of separate eyebrow/h1/subtitle DOM text. This is an
-  AI-generated example banner the user supplied directly, used as-is at their
-  explicit call — it includes its own baked-in "R FRUITS" cartoon logo mark,
-  which sits alongside the real header wordmark logo rather than replacing it;
-  this is a known, deliberate inconsistency the user chose to keep, not an
-  oversight. Swap for real photography/graphic design later. Because the
-  headline text lives inside the image, a real `<h1 className="sr-only">`
-  with the same copy stays in the DOM for accessibility/SEO, and the
-  `<Image>` gets full descriptive `alt` text — don't
-  drop either when touching this component.
-- **CTA frame image**: the hero's button row sits inside another
-  user-supplied AI graphic (`public/images/cta-frame.png`, 1536×1024,
-  `alt=""` since it's purely decorative) — a translucent glass card on
-  marble, framed by fruit in all four corners. Buttons are absolutely
-  positioned over it (`px-[12%] py-[14%]` inset keeps them inside the glass
-  safe zone) rather than the image being cropped — matches the user's
-  standing preference not to crop their supplied images. Button styling
-  itself (pill shape, green-700/outline fills) is unchanged; only the
-  backdrop behind them changed. Don't generalize this "image-as-card-
-  background" pattern to other buttons site-wide — it's a hero-specific
-  flourish, not a new default button treatment.
+- **Hero section background**: `Hero.tsx`'s `<section>` is `relative overflow-
+  hidden` with a full-bleed `absolute inset-0 -z-10` background layer — a
+  marble/fruit-corner photo (`public/images/cta-frame.png` on `sm:` and up,
+  `public/images/hero-bg-mobile.png`, a portrait crop, below `sm`), both
+  user-supplied AI graphics used uncropped per their standing preference. This
+  is the one deliberate departure from the otherwise fully neutral cream/ink/
+  green/gold palette, added because the site read as too monochrome without
+  it. Because the background is `absolute` (scoped to the Hero section's own
+  box, not viewport-`fixed`), it cannot bleed into sections below regardless
+  of their own background — no need to give adjacent sections an explicit
+  opaque background to "cover" it. Keep photographic color accents contained
+  to this backdrop, never as a fill on text, buttons, or UI chrome elsewhere —
+  those stay on the disciplined token palette above.
+- **Hero banner image**: inside that section, `Hero.tsx` renders one
+  full-width image (`public/images/hero-banner-full.png`, 1536×1024) with the
+  headline baked into the graphic instead of separate eyebrow/h1/subtitle DOM
+  text. This is an AI-generated example banner the user supplied directly,
+  used as-is at their explicit call — it includes its own baked-in "R FRUITS"
+  cartoon logo mark, which sits alongside the real header wordmark logo rather
+  than replacing it; this is a known, deliberate inconsistency the user chose
+  to keep, not an oversight. Swap for real photography/graphic design later.
+  Because the headline text lives inside the image, a real
+  `<h1 className="sr-only">` with the same copy stays in the DOM for
+  accessibility/SEO, and the `<Image>` gets full descriptive `alt` text —
+  don't drop either when touching this component.
+- **CTA glass panel**: the button row + trust checklist sit inside a
+  `bg-cream/55 backdrop-blur-md rounded-3xl` panel rather than plain page
+  background — CSS glassmorphism, not another embedded image, so it doesn't
+  duplicate the `cta-frame.png` texture already filling the section behind it.
+  Button styling itself (pill shape, green-700/outline fills) is unchanged.
+  Don't generalize this glass-panel treatment to other buttons site-wide —
+  it's a hero-specific flourish, not a new default button treatment.
 
 ## Radius & elevation
 - **Pill** (`rounded-full`): every button, category filter chip, status badge,
