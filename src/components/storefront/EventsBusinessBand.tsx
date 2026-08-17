@@ -3,7 +3,7 @@ import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 export function EventsBusinessBand() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 grid md:grid-cols-2 gap-8 items-center">
+    <section className="mx-auto max-w-7xl px-4 py-12 grid md:grid-cols-2 gap-8 items-center">
       <PlaceholderImage className="aspect-[4/3] rounded-2xl w-full" />
       <div className="flex flex-col items-center md:items-start text-center md:text-right gap-4">
         <span className="text-xs tracking-[0.25em] text-gold uppercase">Events &amp; Business</span>

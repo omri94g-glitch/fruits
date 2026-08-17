@@ -14,7 +14,7 @@ const occasions = [
 
 export function OccasionNav() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-14">
+    <section className="mx-auto max-w-7xl px-4 py-10">
       <h2 className="font-serif text-2xl md:text-3xl text-ink text-center mb-8">
         לאיזה רגע אתם מזמינים?
       </h2>

@@ -4,7 +4,7 @@ const shots = ["המגש המלא", "האריזה", "הברכה", "מסירת ה
 
 export function HowItArrives() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 text-center">
+    <section className="mx-auto max-w-7xl px-4 py-12 text-center">
       <span className="text-xs tracking-[0.25em] text-gold uppercase">See The Real Thing</span>
       <h2 className="font-serif text-2xl md:text-3xl text-ink mt-2">ככה זה מגיע אליכם</h2>
       <p className="text-ink-muted mt-2 max-w-xl mx-auto">

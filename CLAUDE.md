@@ -60,9 +60,20 @@ the same ink color as a heading, just smaller/regular-weight.
 ## Spacing & layout
 - Container: `max-w-7xl` (7xl for storefront width, `max-w-6xl` for admin,
   `max-w-2xl`–`max-w-4xl` for single-column forms like checkout/login).
-- Section vertical rhythm: `py-16` between major homepage sections; `py-10` for
-  tighter bands (feature strip); consistent — don't mix arbitrary values.
+- Section vertical rhythm: `py-12` between major homepage sections; `py-10` for
+  tighter bands (feature strip, occasion nav, final CTA); consistent — don't mix
+  arbitrary values. Tightened from an earlier `py-16`/`py-14` pass — the
+  original rhythm read as too much dead air between sections on both mobile
+  and desktop.
 - Card/grid gap: `gap-6` for product grids, `gap-4` for tight lists.
+- **Hero color accent**: a single soft, blurred multi-stop gradient glow
+  (coral/mango/olive tones sampled from real fruit) sits behind the hero photo
+  only (`Hero.tsx`, `-inset-6 blur-3xl opacity-70`, `-z-10`) — the one
+  deliberate departure from the otherwise fully neutral cream/ink/green/gold
+  palette, added because the site read as too monochrome without it. Keep this
+  contained to decorative backdrops behind photography, never as a fill on
+  text, buttons, or UI chrome — those stay on the disciplined token palette
+  above.
 
 ## Radius & elevation
 - **Pill** (`rounded-full`): every button, category filter chip, status badge,

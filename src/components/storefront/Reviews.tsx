@@ -9,7 +9,7 @@ export async function Reviews({ productId }: { productId?: string } = {}) {
   });
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 text-center">
+    <section className="mx-auto max-w-7xl px-4 py-12 text-center">
       <span className="text-xs tracking-[0.25em] text-gold uppercase">לקוחות מספרים</span>
       <h2 className="font-serif text-2xl md:text-3xl text-ink mt-2">מה אומרים עלינו</h2>
 

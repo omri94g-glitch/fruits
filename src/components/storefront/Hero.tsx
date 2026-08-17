@@ -12,12 +12,22 @@ const trustItems = [
 
 export function Hero() {
   return (
-    <section className="mx-auto max-w-7xl px-4 pt-8 pb-16 grid md:grid-cols-2 gap-10 items-center">
-      <PlaceholderImage
-        src="/images/tray-classic.png"
-        alt="מגש פירות טריים"
-        className="aspect-square md:aspect-[4/5] rounded-3xl order-2"
-      />
+    <section className="mx-auto max-w-7xl px-4 pt-8 pb-12 grid md:grid-cols-2 gap-10 items-center">
+      <div className="relative order-2">
+        <div
+          aria-hidden="true"
+          className="absolute -inset-6 -z-10 rounded-[2.5rem] opacity-70 blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle at 25% 20%, #F4A25F 0%, transparent 55%), radial-gradient(circle at 80% 30%, #C3543E 0%, transparent 50%), radial-gradient(circle at 50% 85%, #7A8F3D 0%, transparent 55%)",
+          }}
+        />
+        <PlaceholderImage
+          src="/images/tray-classic.png"
+          alt="מגש פירות טריים"
+          className="relative aspect-square md:aspect-[4/5] rounded-3xl"
+        />
+      </div>
 
       <div className="order-1 flex flex-col items-center md:items-start text-center md:text-right gap-5">
         <span className="text-xs tracking-[0.25em] text-gold uppercase">

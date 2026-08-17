@@ -9,7 +9,7 @@ const features = [
 
 export function FeatureStrip() {
   return (
-    <section className="bg-cream-alt py-12">
+    <section className="bg-cream-alt py-10">
       <h2 className="font-serif text-2xl md:text-3xl text-ink text-center mb-8">
         למה לבחור ב-Rfruits
       </h2>

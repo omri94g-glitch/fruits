@@ -11,7 +11,7 @@ export async function BestSellers() {
   });
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16">
+    <section className="mx-auto max-w-7xl px-4 py-12">
       <div className="text-center mb-10">
         <span className="text-xs tracking-[0.25em] text-gold uppercase">Best Sellers</span>
         <h2 className="font-serif text-3xl text-ink mt-2">המגשים שהלקוחות שלנו הכי אוהבים</h2>
