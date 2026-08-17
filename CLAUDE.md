@@ -86,6 +86,17 @@ the same ink color as a heading, just smaller/regular-weight.
   with the same copy stays in the DOM for accessibility/SEO, and the
   `<Image>` gets full descriptive `alt` text — don't
   drop either when touching this component.
+- **CTA frame image**: the hero's button row sits inside another
+  user-supplied AI graphic (`public/images/cta-frame.png`, 1536×1024,
+  `alt=""` since it's purely decorative) — a translucent glass card on
+  marble, framed by fruit in all four corners. Buttons are absolutely
+  positioned over it (`px-[12%] py-[14%]` inset keeps them inside the glass
+  safe zone) rather than the image being cropped — matches the user's
+  standing preference not to crop their supplied images. Button styling
+  itself (pill shape, green-700/outline fills) is unchanged; only the
+  backdrop behind them changed. Don't generalize this "image-as-card-
+  background" pattern to other buttons site-wide — it's a hero-specific
+  flourish, not a new default button treatment.
 
 ## Radius & elevation
 - **Pill** (`rounded-full`): every button, category filter chip, status badge,

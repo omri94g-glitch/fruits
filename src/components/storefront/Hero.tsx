@@ -36,21 +36,33 @@ export function Hero() {
       </div>
 
       <div className="flex flex-col items-center text-center gap-5 max-w-2xl">
-        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-          <Link
-            href="/products"
-            className="rounded-full bg-green-700 text-cream px-8 py-3 text-sm text-center hover:bg-green-600 transition-colors"
-          >
-            לבחירת מגש
-          </Link>
-          <a
-            href={buildWhatsAppLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full border border-green-700 text-green-700 px-8 py-3 text-sm text-center hover:bg-green-700 hover:text-cream transition-colors"
-          >
-            הזמנה מהירה בוואטסאפ
-          </a>
+        <div className="relative w-full">
+          <Image
+            src="/images/cta-frame.png"
+            alt=""
+            aria-hidden="true"
+            width={1536}
+            height={1024}
+            className="w-full h-auto"
+          />
+          <div className="absolute inset-0 flex items-center justify-center px-[12%] py-[14%]">
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <Link
+                href="/products"
+                className="rounded-full bg-green-700 text-cream px-8 py-3 text-sm text-center hover:bg-green-600 transition-colors"
+              >
+                לבחירת מגש
+              </Link>
+              <a
+                href={buildWhatsAppLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-green-700 text-green-700 px-8 py-3 text-sm text-center hover:bg-green-700 hover:text-cream transition-colors bg-cream/70"
+              >
+                הזמנה מהירה בוואטסאפ
+              </a>
+            </div>
+          </div>
         </div>
 
         <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2">
