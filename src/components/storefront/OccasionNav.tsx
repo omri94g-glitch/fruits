@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { trackEvent } from "@/lib/analytics";
 
@@ -15,9 +16,14 @@ const occasions = [
 export function OccasionNav() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-10">
-      <h2 className="font-serif text-2xl md:text-3xl text-ink text-center mb-8">
-        לאיזה רגע אתם מזמינים?
-      </h2>
+      <h2 className="sr-only">לאיזה רגע אתם מזמינים?</h2>
+      <Image
+        src="/images/occasion-heading.png"
+        alt=""
+        width={1844}
+        height={230}
+        className="mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md h-auto mb-8"
+      />
 
       <div
         className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4

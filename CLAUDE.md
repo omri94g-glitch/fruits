@@ -112,6 +112,26 @@ the same ink color as a heading, just smaller/regular-weight.
   the user's request to strip opaque white backgrounds from the hero).
   Button styling itself (pill shape, green-700/outline fills) is unchanged
   and stays legible directly against the light marble backdrop.
+- **Image-as-heading pattern**: `OccasionNav.tsx`'s "לאיזה רגע אתם מזמינים?"
+  heading is `public/images/occasion-heading.png` (transparent PNG, same
+  script-serif calligraphy style as the hero banner text) instead of DOM text
+  — the user is standardizing section headings on this hand-lettered style
+  rather than `font-serif` CSS text. Same accessibility pattern as the hero:
+  a real `<h2 className="sr-only">` with the same copy stays in the DOM,
+  image gets `alt=""` since it's redundant with the sr-only heading. If more
+  section headings get this treatment, keep this pattern (sr-only heading +
+  decorative image) rather than dropping the semantic heading.
+- **"Transparent" AI exports need verification, not trust**: every
+  transparent-background image the user has supplied so far (hero banner,
+  this occasion heading) actually shipped as flat RGB with a checkerboard
+  baked into the pixels, not a real alpha channel — `sips -g hasAlpha` or PIL
+  (`img.mode` / `'transparency' in img.info`) will show the truth in two
+  seconds. Before wiring in any "transparent" user-supplied PNG, check for
+  real alpha first; if it's fake, rebuild it by color-keying out the
+  near-neutral, high-brightness checkerboard pixels (this repo's working
+  threshold: `spread(max-min per pixel) <= 4` and `min-channel >= 225`), then
+  verify by compositing onto a solid color and visually checking for holes in
+  the real artwork before shipping.
 
 ## Radius & elevation
 - **Pill** (`rounded-full`): every button, category filter chip, status badge,
