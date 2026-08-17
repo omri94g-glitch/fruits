@@ -25,11 +25,11 @@ export default async function AdminOrderDetailPage({
   return (
     <div className="flex flex-col gap-8 max-w-3xl">
       <div>
-        <Link href="/admin" className="text-sm text-ink/50 hover:text-green-700">
+        <Link href="/admin" className="text-sm text-ink-muted hover:text-green-700">
           ← חזרה להזמנות
         </Link>
         <div className="flex items-center justify-between flex-wrap gap-3 mt-2">
-          <h1 dir="ltr" className="font-serif text-2xl text-green-700 text-right">
+          <h1 dir="ltr" className="font-serif text-2xl text-ink text-right">
             {order.orderNumber}
           </h1>
           <OrderStatusBadge status={order.status} />
@@ -84,7 +84,7 @@ export default async function AdminOrderDetailPage({
 
       <section className="flex flex-col gap-3">
         <h2 className="font-medium text-sm">תשלום</h2>
-        <p className="text-sm text-ink/70">
+        <p className="text-sm text-ink">
           סטטוס תשלום: {order.paymentStatus}
           {order.paymentProvider && ` · ${order.paymentProvider}`}
         </p>
@@ -97,7 +97,7 @@ export default async function AdminOrderDetailPage({
 
       <section className="flex flex-col gap-3">
         <h2 className="font-medium text-sm">היסטוריית סטטוסים</h2>
-        <div className="flex flex-col gap-2 text-sm text-ink/60">
+        <div className="flex flex-col gap-2 text-sm text-ink-muted">
           {order.statusHistory.map((h) => (
             <div key={h.id} className="flex items-center justify-between">
               <span>{h.status}</span>

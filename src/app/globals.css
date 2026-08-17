@@ -1,24 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --color-cream: #f8f4ea;
-  --color-cream-alt: #f0ead9;
-  --color-ink: #262a1f;
-  --color-green-900: #1f2818;
-  --color-green-700: #3b4a2f;
-  --color-green-600: #4a5c3b;
-  --color-gold: #ab8c4f;
-  --color-line: #e2dbc7;
+  /* Sampled from design-reference/homepage-reference.jpg - see CLAUDE.md */
+  --color-cream: #fbf9f6;
+  --color-cream-alt: #f5f0ea;
+  --color-hero: #eee6dc;
+  --color-ink: #1b1d14;
+  --color-ink-muted: #6e6f5e;
+  --color-green-900: #1f2117;
+  --color-green-700: #333c1e;
+  --color-green-600: #465021;
+  --color-gold: #b0873f;
+  --color-gold-soft: #e4c989;
+  --color-line: #e5dfd2;
 }
 
 @theme inline {
   --color-cream: var(--color-cream);
   --color-cream-alt: var(--color-cream-alt);
+  --color-hero: var(--color-hero);
   --color-ink: var(--color-ink);
+  --color-ink-muted: var(--color-ink-muted);
   --color-green-900: var(--color-green-900);
   --color-green-700: var(--color-green-700);
   --color-green-600: var(--color-green-600);
   --color-gold: var(--color-gold);
+  --color-gold-soft: var(--color-gold-soft);
   --color-line: var(--color-line);
   --font-sans: var(--font-assistant);
   --font-serif: var(--font-frank-ruhl);

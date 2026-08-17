@@ -30,9 +30,9 @@ export default async function ProductPage({
       <div className="flex flex-col gap-5">
         <div>
           <span className="text-xs tracking-[0.25em] text-gold uppercase">{product.category}</span>
-          <h1 className="font-serif text-3xl text-green-700 mt-2">{product.name}</h1>
+          <h1 className="font-serif text-3xl text-ink mt-2">{product.name}</h1>
         </div>
-        <p className="text-ink/60 leading-relaxed">{product.description}</p>
+        <p className="text-ink-muted leading-relaxed">{product.description}</p>
 
         <AddToCartForm
           productId={product.id}

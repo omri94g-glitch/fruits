@@ -35,12 +35,12 @@ export default function AdminLoginPage() {
         className="w-full max-w-sm flex flex-col gap-5 bg-cream-alt/60 border border-line rounded-2xl p-8"
       >
         <div className="text-center">
-          <span className="font-serif text-2xl text-green-700">Rfruits</span>
-          <p className="text-sm text-ink/50 mt-1">כניסת ניהול</p>
+          <span className="font-serif text-2xl text-ink">Rfruits</span>
+          <p className="text-sm text-ink-muted mt-1">כניסת ניהול</p>
         </div>
 
         <label className="flex flex-col gap-1.5 text-sm">
-          <span className="text-ink/60">אימייל</span>
+          <span className="text-ink-muted">אימייל</span>
           <input
             type="email"
             required
@@ -52,7 +52,7 @@ export default function AdminLoginPage() {
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm">
-          <span className="text-ink/60">סיסמה</span>
+          <span className="text-ink-muted">סיסמה</span>
           <input
             type="password"
             required

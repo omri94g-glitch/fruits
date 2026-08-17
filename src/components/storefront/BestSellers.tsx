@@ -13,11 +13,11 @@ export async function BestSellers() {
     <section className="mx-auto max-w-7xl px-4 py-16">
       <div className="text-center mb-10">
         <span className="text-xs tracking-[0.25em] text-gold uppercase">Best Sellers</span>
-        <h2 className="font-serif text-3xl text-green-700 mt-2">המגשים האהובים ביותר</h2>
+        <h2 className="font-serif text-3xl text-ink mt-2">המגשים האהובים ביותר</h2>
       </div>
 
       {products.length === 0 ? (
-        <p className="text-center text-ink/50">בקרוב יתווספו מגשים</p>
+        <p className="text-center text-ink-muted">בקרוב יתווספו מגשים</p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
           {products.map((p) => (

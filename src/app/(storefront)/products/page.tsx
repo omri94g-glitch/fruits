@@ -25,7 +25,7 @@ export default async function ProductsPage({
     <div className="mx-auto max-w-7xl px-4 py-14">
       <div className="text-center mb-10">
         <span className="text-xs tracking-[0.25em] text-gold uppercase">Our Collection</span>
-        <h1 className="font-serif text-3xl text-green-700 mt-2">כל המגשים</h1>
+        <h1 className="font-serif text-3xl text-ink mt-2">כל המגשים</h1>
       </div>
 
       <div className="flex flex-wrap justify-center gap-3 mb-10">
@@ -34,7 +34,7 @@ export default async function ProductsPage({
           className={`rounded-full px-5 py-1.5 text-sm border transition-colors ${
             !category
               ? "bg-green-700 text-cream border-green-700"
-              : "border-line text-ink/60 hover:border-green-700"
+              : "border-line text-ink-muted hover:border-green-700"
           }`}
         >
           הכל
@@ -46,7 +46,7 @@ export default async function ProductsPage({
             className={`rounded-full px-5 py-1.5 text-sm border transition-colors ${
               category === c.category
                 ? "bg-green-700 text-cream border-green-700"
-                : "border-line text-ink/60 hover:border-green-700"
+                : "border-line text-ink-muted hover:border-green-700"
             }`}
           >
             {c.category}
@@ -55,7 +55,7 @@ export default async function ProductsPage({
       </div>
 
       {products.length === 0 ? (
-        <p className="text-center text-ink/50">לא נמצאו מגשים בקטגוריה זו</p>
+        <p className="text-center text-ink-muted">לא נמצאו מגשים בקטגוריה זו</p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((p) => (

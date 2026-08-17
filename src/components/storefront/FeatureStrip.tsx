@@ -13,9 +13,9 @@ export function FeatureStrip() {
       <div className="mx-auto max-w-7xl px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
         {features.map(({ icon: Icon, title, desc }) => (
           <div key={title} className="flex flex-col items-center text-center gap-2">
-            <Icon size={22} className="text-green-700" />
-            <span className="text-sm font-medium">{title}</span>
-            <span className="text-xs text-ink/50">{desc}</span>
+            <Icon size={22} className="text-ink" />
+            <span className="text-sm font-medium text-ink">{title}</span>
+            <span className="text-xs text-ink-muted">{desc}</span>
           </div>
         ))}
       </div>

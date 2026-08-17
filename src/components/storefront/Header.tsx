@@ -19,8 +19,6 @@ export function Header() {
   const pathname = usePathname();
   const [queryString, setQueryString] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [homeLink, ...restLinks] = navLinks;
-  const contactLink = restLinks.pop();
 
   const isActive = (href: string) => {
     const [hrefPath, hrefQuery] = href.split("?");
@@ -75,78 +73,62 @@ export function Header() {
             >
               <MessageCircle size={15} />
             </a>
-            <Link
-              href="/cart"
-              className="flex items-center gap-1 hover:text-gold transition-colors"
-            >
-              <ShoppingBag size={15} />
-              <span>{itemCount}</span>
-            </Link>
           </div>
         </div>
       </div>
 
       <div className="border-b border-line">
-        <div className="mx-auto max-w-7xl px-4 h-24 grid grid-cols-[1fr_auto_auto] items-center">
-          <nav className="hidden lg:flex items-center gap-8 text-sm justify-start">
-            {[homeLink, ...restLinks].reverse().map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="relative text-ink/80 hover:text-green-700 transition-colors pb-1 data-[active=true]:text-green-700 data-[active=true]:font-medium data-[active=true]:after:absolute data-[active=true]:after:right-0 data-[active=true]:after:left-0 data-[active=true]:after:-bottom-0.5 data-[active=true]:after:h-0.5 data-[active=true]:after:bg-green-700"
-                data-active={isActive(link.href)}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+        <div className="mx-auto max-w-7xl px-4 h-20 flex items-center justify-between gap-8">
+          <div className="flex items-center gap-10">
+            <Link href="/" className="font-serif text-2xl text-ink shrink-0">
+              {siteConfig.name}
+            </Link>
 
-          <Link href="/" className="flex flex-col items-center leading-none px-6">
-            <span className="font-serif text-3xl text-green-700">{siteConfig.name}</span>
-            <span className="text-[10px] tracking-[0.3em] text-gold uppercase mt-1">
-              מגשי פירות טריים
-            </span>
-          </Link>
+            <nav className="hidden lg:flex items-center gap-7 text-sm">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="relative text-ink-muted hover:text-green-700 transition-colors pb-1 data-[active=true]:text-green-700 data-[active=true]:font-medium data-[active=true]:after:absolute data-[active=true]:after:right-0 data-[active=true]:after:left-0 data-[active=true]:after:-bottom-0.5 data-[active=true]:after:h-0.5 data-[active=true]:after:bg-green-700"
+                  data-active={isActive(link.href)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
 
-          <nav className="flex items-center justify-end">
-            {contactLink && (
-              <Link
-                href={contactLink.href}
-                className="hidden lg:inline text-sm text-ink/80 hover:text-green-700 transition-colors data-[active=true]:text-green-700 data-[active=true]:font-medium"
-                data-active={isActive(contactLink.href)}
-              >
-                {contactLink.label}
-              </Link>
-            )}
+          <div className="flex items-center gap-5">
             <Link
               href="/cart"
-              className="lg:hidden flex items-center gap-1 text-ink/80"
+              className="flex items-center gap-1.5 text-ink hover:text-green-700 transition-colors"
               aria-label="עגלת קניות"
             >
-              <ShoppingBag size={20} />
+              <ShoppingBag size={19} />
+              <span className="text-sm">{itemCount}</span>
             </Link>
             <button
               type="button"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={mobileOpen ? "סגירת תפריט" : "פתיחת תפריט"}
-              className="lg:hidden flex items-center text-ink/80 mr-4"
+              className="lg:hidden flex items-center text-ink"
             >
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
-          </nav>
+          </div>
         </div>
 
         {mobileOpen && (
           <nav className="lg:hidden border-t border-line flex flex-col items-center gap-1 py-4">
-            {[homeLink, ...restLinks, contactLink].filter(Boolean).map((link) => (
+            {navLinks.map((link) => (
               <Link
-                key={link!.href}
-                href={link!.href}
+                key={link.href}
+                href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="w-full text-center py-2 text-sm text-ink/80 hover:text-green-700 data-[active=true]:text-green-700 data-[active=true]:font-medium transition-colors"
-                data-active={isActive(link!.href)}
+                className="w-full text-center py-2 text-sm text-ink-muted hover:text-green-700 data-[active=true]:text-green-700 data-[active=true]:font-medium transition-colors"
+                data-active={isActive(link.href)}
               >
-                {link!.label}
+                {link.label}
               </Link>
             ))}
           </nav>

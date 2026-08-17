@@ -21,20 +21,20 @@ export function Hero() {
         <span className="text-xs tracking-[0.25em] text-gold uppercase">
           Premium Fruit Platters
         </span>
-        <h1 className="font-serif text-4xl md:text-5xl leading-tight text-green-700">
+        <h1 className="font-serif text-4xl md:text-5xl leading-tight text-ink">
           מגשי פירות
           <br />
           טריים. יפים. טעימים.
         </h1>
-        <p className="text-ink/60">בהכנה ידנית אנו יוצרים מגשי פירות איכותיים</p>
+        <p className="text-ink-muted">בהכנה ידנית אנו יוצרים מגשי פירות איכותיים</p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
           {badges.map(({ icon: Icon, label }) => (
             <div key={label} className="flex flex-col items-center gap-2 text-center">
-              <span className="flex items-center justify-center w-11 h-11 rounded-full bg-cream-alt text-green-700">
+              <span className="flex items-center justify-center w-11 h-11 rounded-full bg-cream-alt text-ink">
                 <Icon size={20} />
               </span>
-              <span className="text-xs text-ink/60 whitespace-pre-line">{label}</span>
+              <span className="text-xs text-ink-muted whitespace-pre-line">{label}</span>
             </div>
           ))}
         </div>

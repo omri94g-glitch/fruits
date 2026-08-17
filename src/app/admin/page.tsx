@@ -36,7 +36,7 @@ export default async function AdminOrdersPage({
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
-        <h1 className="font-serif text-2xl text-green-700">הזמנות</h1>
+        <h1 className="font-serif text-2xl text-ink">הזמנות</h1>
         <form method="GET" className="flex gap-2">
           {status && <input type="hidden" name="status" value={status} />}
           <input
@@ -55,7 +55,7 @@ export default async function AdminOrdersPage({
           className={`rounded-full px-4 py-1.5 text-sm border transition-colors ${
             !status
               ? "bg-green-700 text-cream border-green-700"
-              : "border-line text-ink/60 hover:border-green-700"
+              : "border-line text-ink-muted hover:border-green-700"
           }`}
         >
           הכל
@@ -67,7 +67,7 @@ export default async function AdminOrdersPage({
             className={`rounded-full px-4 py-1.5 text-sm border transition-colors ${
               status === s.value
                 ? "bg-green-700 text-cream border-green-700"
-                : "border-line text-ink/60 hover:border-green-700"
+                : "border-line text-ink-muted hover:border-green-700"
             }`}
           >
             {s.label}

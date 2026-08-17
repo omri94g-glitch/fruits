@@ -7,7 +7,7 @@ export function SignOutButton() {
     <button
       type="button"
       onClick={() => signOut({ callbackUrl: "/admin/login" })}
-      className="text-sm text-ink/60 hover:text-green-700 transition-colors"
+      className="text-sm text-ink-muted hover:text-green-700 transition-colors"
     >
       התנתקות
     </button>

@@ -47,7 +47,7 @@ export function AddToCartForm({
     <div className="flex flex-col gap-6">
       {variants.length > 1 && (
         <div>
-          <span className="text-sm text-ink/60 block mb-2">בחרו גודל</span>
+          <span className="text-sm text-ink-muted block mb-2">בחרו גודל</span>
           <div className="flex flex-wrap gap-2">
             {variants.map((v) => (
               <button
@@ -57,7 +57,7 @@ export function AddToCartForm({
                 className={`rounded-full px-4 py-2 text-sm border transition-colors ${
                   v.id === variantId
                     ? "bg-green-700 text-cream border-green-700"
-                    : "border-line text-ink/70 hover:border-green-700"
+                    : "border-line text-ink-muted hover:border-green-700"
                 }`}
               >
                 {v.label} · {v.price} ₪
@@ -68,13 +68,13 @@ export function AddToCartForm({
       )}
 
       <div className="flex items-center gap-4">
-        <span className="text-sm text-ink/60">כמות</span>
+        <span className="text-sm text-ink-muted">כמות</span>
         <div className="flex items-center gap-3 border border-line rounded-full px-3 py-1.5">
           <button
             type="button"
             aria-label="הפחת כמות"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            className="text-ink/60 hover:text-green-700"
+            className="text-ink-muted hover:text-green-700"
           >
             <Minus size={16} />
           </button>
@@ -83,7 +83,7 @@ export function AddToCartForm({
             type="button"
             aria-label="הוסף כמות"
             onClick={() => setQuantity((q) => q + 1)}
-            className="text-ink/60 hover:text-green-700"
+            className="text-ink-muted hover:text-green-700"
           >
             <Plus size={16} />
           </button>

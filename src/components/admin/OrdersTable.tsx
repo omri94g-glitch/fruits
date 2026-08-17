@@ -13,13 +13,13 @@ type OrderRow = {
 
 export function OrdersTable({ orders }: { orders: OrderRow[] }) {
   if (orders.length === 0) {
-    return <p className="text-center text-ink/50 py-12">לא נמצאו הזמנות</p>;
+    return <p className="text-center text-ink-muted py-12">לא נמצאו הזמנות</p>;
   }
 
   return (
     <div className="overflow-x-auto rounded-2xl border border-line">
       <table className="w-full text-sm text-right">
-        <thead className="bg-cream-alt text-ink/60">
+        <thead className="bg-cream-alt text-ink-muted">
           <tr>
             <th className="px-4 py-3 font-medium">מס&apos; הזמנה</th>
             <th className="px-4 py-3 font-medium">לקוח</th>
@@ -43,7 +43,7 @@ export function OrdersTable({ orders }: { orders: OrderRow[] }) {
               </td>
               <td className="px-4 py-3">
                 <div>{order.customer.name}</div>
-                <div dir="ltr" className="text-xs text-ink/50 text-right">
+                <div dir="ltr" className="text-xs text-ink-muted text-right">
                   {order.customer.phone}
                 </div>
               </td>
@@ -51,12 +51,12 @@ export function OrdersTable({ orders }: { orders: OrderRow[] }) {
                 <OrderStatusBadge status={order.status} />
               </td>
               <td className="px-4 py-3">{order.totalAmount} ₪</td>
-              <td className="px-4 py-3 text-ink/60">
+              <td className="px-4 py-3 text-ink-muted">
                 {order.deliveryDate
                   ? new Date(order.deliveryDate).toLocaleDateString("he-IL")
                   : "—"}
               </td>
-              <td className="px-4 py-3 text-ink/60">
+              <td className="px-4 py-3 text-ink-muted">
                 {new Date(order.createdAt).toLocaleDateString("he-IL")}
               </td>
             </tr>

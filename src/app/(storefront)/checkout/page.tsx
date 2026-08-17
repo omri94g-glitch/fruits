@@ -72,7 +72,7 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-24 text-center">
-        <h1 className="font-serif text-2xl text-green-700 mb-4">העגלה שלכם ריקה</h1>
+        <h1 className="font-serif text-2xl text-ink mb-4">העגלה שלכם ריקה</h1>
         <Link
           href="/products"
           className="inline-block rounded-full bg-green-700 text-cream px-8 py-3 text-sm hover:bg-green-600 transition-colors"
@@ -86,7 +86,7 @@ export default function CheckoutPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-14 grid md:grid-cols-[1.4fr_1fr] gap-10">
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-        <h1 className="font-serif text-2xl text-green-700">פרטי משלוח ותשלום</h1>
+        <h1 className="font-serif text-2xl text-ink">פרטי משלוח ותשלום</h1>
 
         <div className="grid sm:grid-cols-2 gap-4">
           <Field label="שם מלא" value={form.name} onChange={update("name")} required />
@@ -118,7 +118,7 @@ export default function CheckoutPage() {
       </form>
 
       <div className="bg-cream-alt rounded-2xl p-6 h-fit flex flex-col gap-4">
-        <h2 className="font-serif text-lg text-green-700">סיכום הזמנה</h2>
+        <h2 className="font-serif text-lg text-ink">סיכום הזמנה</h2>
         {items.map((item) => (
           <div key={`${item.productId}-${item.variantId}`} className="flex justify-between text-sm">
             <span>
@@ -155,7 +155,7 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1.5 text-sm">
-      <span className="text-ink/60">{label}</span>
+      <span className="text-ink-muted">{label}</span>
       <input
         type={type}
         value={value}

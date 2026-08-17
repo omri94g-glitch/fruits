@@ -11,13 +11,13 @@ export default async function CheckoutSuccessPage({
   return (
     <div className="mx-auto max-w-2xl px-4 py-24 text-center flex flex-col items-center gap-4">
       <CheckCircle2 size={48} className="text-green-700" />
-      <h1 className="font-serif text-3xl text-green-700">ההזמנה התקבלה בהצלחה!</h1>
+      <h1 className="font-serif text-3xl text-ink">ההזמנה התקבלה בהצלחה!</h1>
       {order && (
-        <p dir="ltr" className="text-ink/60">
+        <p dir="ltr" className="text-ink-muted">
           מספר הזמנה: {order}
         </p>
       )}
-      <p className="text-ink/60">
+      <p className="text-ink-muted">
         תודה שהזמנתם מ-Rfruits. ניצור איתכם קשר בהקדם לתיאום המשלוח.
       </p>
       <Link

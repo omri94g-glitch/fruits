@@ -11,13 +11,13 @@ export default async function CheckoutFailPage({
   return (
     <div className="mx-auto max-w-2xl px-4 py-24 text-center flex flex-col items-center gap-4">
       <XCircle size={48} className="text-red-600" />
-      <h1 className="font-serif text-3xl text-green-700">התשלום לא הושלם</h1>
+      <h1 className="font-serif text-3xl text-ink">התשלום לא הושלם</h1>
       {order && (
-        <p dir="ltr" className="text-ink/60">
+        <p dir="ltr" className="text-ink-muted">
           מספר הזמנה: {order}
         </p>
       )}
-      <p className="text-ink/60">
+      <p className="text-ink-muted">
         אירעה תקלה בתהליך הסליקה. ניתן לנסות שוב, או ליצור איתנו קשר לסיוע.
       </p>
       <div className="flex gap-3 mt-4">

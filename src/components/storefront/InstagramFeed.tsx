@@ -4,8 +4,8 @@ import { siteConfig } from "@/lib/site-config";
 export function InstagramFeed() {
   return (
     <section className="mx-auto max-w-7xl px-4 pb-16 text-center">
-      <h2 className="font-serif text-2xl text-green-700">עקבו אחרינו באינסטגרם</h2>
-      <p dir="ltr" className="text-sm text-ink/50 mt-1">{siteConfig.instagramHandle}</p>
+      <h2 className="font-serif text-2xl text-ink">עקבו אחרינו באינסטגרם</h2>
+      <p dir="ltr" className="text-sm text-ink-muted mt-1">{siteConfig.instagramHandle}</p>
 
       <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mt-8">
         {Array.from({ length: 6 }).map((_, i) => (
