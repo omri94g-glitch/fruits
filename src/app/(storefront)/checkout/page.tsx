@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/lib/cart-context";
+import { trackEvent } from "@/lib/analytics";
 
 export default function CheckoutPage() {
-  const { items, subtotal, clear } = useCart();
+  const { items, subtotal, clear, delivery, setDelivery } = useCart();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -16,14 +17,16 @@ export default function CheckoutPage() {
     phone: "",
     email: "",
     address: "",
-    city: "",
-    date: "",
     timeSlot: "",
-    cardMessage: "",
   });
 
   const update = (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  useEffect(() => {
+    if (items.length > 0) trackEvent("begin_checkout", { value: subtotal, items: items.length });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,15 +41,16 @@ export default function CheckoutPage() {
           customer: { name: form.name, phone: form.phone, email: form.email },
           delivery: {
             address: form.address,
-            city: form.city,
-            date: form.date || undefined,
+            city: delivery.deliveryCity,
+            date: delivery.deliveryDate || undefined,
             timeSlot: form.timeSlot || undefined,
-            cardMessage: form.cardMessage || undefined,
+            cardMessage: delivery.cardMessage || undefined,
           },
           items: items.map((i) => ({
             productId: i.productId,
             variantId: i.variantId,
             quantity: i.quantity,
+            addOnIds: i.addOns.map((a) => a.id),
           })),
         }),
       });
@@ -64,6 +68,7 @@ export default function CheckoutPage() {
         router.push(data.redirectUrl);
       }
     } catch (err) {
+      trackEvent("payment_error", { message: err instanceof Error ? err.message : "unknown" });
       setError(err instanceof Error ? err.message : "משהו השתבש, נסו שוב");
       setSubmitting(false);
     }
@@ -95,16 +100,30 @@ export default function CheckoutPage() {
         <Field label="אימייל (לא חובה)" type="email" value={form.email} onChange={update("email")} dir="ltr" />
 
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field label="עיר" value={form.city} onChange={update("city")} required />
+          <Field
+            label="עיר"
+            value={delivery.deliveryCity}
+            onChange={(e) => setDelivery({ deliveryCity: e.target.value })}
+            required
+          />
           <Field label="כתובת למשלוח" value={form.address} onChange={update("address")} required />
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field label="תאריך משלוח מבוקש" type="date" value={form.date} onChange={update("date")} />
+          <Field
+            label="תאריך משלוח מבוקש"
+            type="date"
+            value={delivery.deliveryDate}
+            onChange={(e) => setDelivery({ deliveryDate: e.target.value })}
+          />
           <Field label="שעת משלוח מועדפת" value={form.timeSlot} onChange={update("timeSlot")} placeholder="לדוגמה: 10:00-14:00" />
         </div>
 
-        <Field label="הקדשה לכרטיס (לא חובה)" value={form.cardMessage} onChange={update("cardMessage")} />
+        <Field
+          label="הקדשה לכרטיס (לא חובה)"
+          value={delivery.cardMessage}
+          onChange={(e) => setDelivery({ cardMessage: e.target.value })}
+        />
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
@@ -119,14 +138,22 @@ export default function CheckoutPage() {
 
       <div className="bg-cream-alt rounded-2xl p-6 h-fit flex flex-col gap-4">
         <h2 className="font-serif text-lg text-ink">סיכום הזמנה</h2>
-        {items.map((item) => (
-          <div key={`${item.productId}-${item.variantId}`} className="flex justify-between text-sm">
-            <span>
-              {item.name} ({item.variantLabel}) × {item.quantity}
-            </span>
-            <span>{item.price * item.quantity} ₪</span>
-          </div>
-        ))}
+        {items.map((item) => {
+          const addOnsTotal = item.addOns.reduce((sum, a) => sum + a.price, 0);
+          return (
+            <div key={`${item.productId}-${item.variantId}`} className="flex justify-between text-sm">
+              <span>
+                {item.name} ({item.variantLabel}) × {item.quantity}
+                {item.addOns.length > 0 && (
+                  <span className="block text-xs text-ink-muted">
+                    {item.addOns.map((a) => a.label).join(", ")}
+                  </span>
+                )}
+              </span>
+              <span>{(item.price + addOnsTotal) * item.quantity} ₪</span>
+            </div>
+          );
+        })}
         <div className="flex justify-between border-t border-line pt-3 font-medium">
           <span>סה&quot;כ</span>
           <span>{subtotal} ₪</span>

@@ -9,7 +9,10 @@ const features = [
 
 export function FeatureStrip() {
   return (
-    <section className="bg-cream-alt py-10">
+    <section className="bg-cream-alt py-12">
+      <h2 className="font-serif text-2xl md:text-3xl text-ink text-center mb-8">
+        למה לבחור ב-Rfruits
+      </h2>
       <div className="mx-auto max-w-7xl px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
         {features.map(({ icon: Icon, title, desc }) => (
           <div key={title} className="flex flex-col items-center text-center gap-2">

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { generateOrderNumber } from "@/lib/order-number";
 import { createCardcomPayment, isCardcomConfigured } from "@/lib/payments/cardcom";
+import { getAddOn } from "@/lib/add-ons";
 
 const checkoutSchema = z.object({
   customer: z.object({
@@ -23,6 +24,7 @@ const checkoutSchema = z.object({
         productId: z.string(),
         variantId: z.string(),
         quantity: z.number().int().positive(),
+        addOnIds: z.array(z.string()).optional(),
       })
     )
     .min(1),
@@ -50,12 +52,18 @@ export async function POST(request: Request) {
     if (!variant || variant.productId !== item.productId) {
       throw new Error("מוצר לא נמצא");
     }
+    const addOns = (item.addOnIds ?? [])
+      .map((id) => getAddOn(id))
+      .filter((a): a is NonNullable<typeof a> => Boolean(a));
+    const addOnsTotal = addOns.reduce((sum, a) => sum + a.price, 0);
+
     return {
       productId: variant.productId,
       variantId: variant.id,
       nameSnapshot: `${variant.product.name} - ${variant.label}`,
       quantity: item.quantity,
-      unitPrice: variant.price,
+      unitPrice: Number(variant.price) + addOnsTotal,
+      addOns: addOns.length > 0 ? addOns : undefined,
     };
   });
 

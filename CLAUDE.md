@@ -74,12 +74,18 @@ the same ink color as a heading, just smaller/regular-weight.
   reserved for interactive elements, not decorative iconography).
 - **Plain icon row** (feature strip lower on page): icon + label, no circle
   background — this contrast with the hero badges is intentional, keep it.
-- **Product card**: image wrapped in a single `Link` (`rounded-2xl overflow-hidden`),
-  CTA pill absolutely positioned over the image bottom edge. Below `lg`, CTA is
-  always visible (no hover on touch). At `lg`+, CTA starts `opacity-0
-  translate-y-2` and reveals on `group-hover`, image gets a subtle
-  `group-hover:scale-105`. Name + price sit below the image, always visible,
-  both `text-ink` (price is not muted — see Color tokens).
+- **Product card** (CRO pass, supersedes the earlier hover-reveal version):
+  image, gold badge (top-right corner, e.g. "הנמכר ביותר") when present, name,
+  1-line description, serves label, price (always visible, `text-ink`, never
+  hidden), then a **bold always-visible** `bg-green-700` pill CTA
+  ("בחרו גודל והזמינו") below the card — opens `QuickOrderModal`, does not
+  navigate. Conversion clarity wins over the earlier hover-only affordance.
+- **Quick-order modal / cart drawer**: cart is a slide-out drawer
+  (`CartDrawer`, left-anchored) opened from the header cart button, not a page
+  navigation — `/cart` still exists as a fallback route reusing the same
+  `CartItemsList`. Adding a product opens `QuickOrderModal` first (size+serves,
+  qty, delivery date/city, greeting, add-ons, live total) which writes into
+  cart-level shared delivery fields, then opens the drawer.
 - **Nav active state**: `text-green-700 font-medium` plus a `2px` green-700
   underline — not a background pill.
 - **Category/status filter chip**: pill, active = solid `bg-green-700
@@ -104,9 +110,19 @@ clone — don't "fix" these back toward the reference:
   anchors the start (right), all nav links sit together beside it, cart +
   mobile-menu toggle sit at the end (left). The reference's center-logo split
   layout is a distinctive, recognizable pattern — avoid reintroducing it.
-- **Product cards reveal their CTA on hover** (desktop) instead of an
-  always-visible button under every image. This is also a meaningful
-  interaction-model difference from the reference, not just a color change.
+- **Product cards use a bold always-visible CTA** ("בחרו גודל והזמינו") that
+  opens a quick-order modal — chosen deliberately for conversion clarity in
+  the CRO pass (an earlier hover-reveal version was tried first and reverted).
+
+## Never fabricate business content
+Reviews, customer/order counts, delivery zones, kashrut/allergen certification,
+and stock/urgency counters must reflect **real** data only — never invented.
+The `Review` model ships with zero seed rows on purpose; `Reviews.tsx` renders
+an honest "אוספים ביקורות" empty state until real approved reviews exist.
+Product `allergensInfo`/`kosherInfo` use an explicit "יעודכן בקרוב" placeholder,
+never an implied certification. If asked for urgency messaging, use a generic
+honest line ("מומלץ להזמין מראש...") — no fake countdowns/stock unless backed
+by a real inventory system.
 
 ## RTL specifics
 - Root `<html dir="rtl" lang="he">`. Mixed Latin/number strings (phone, email,

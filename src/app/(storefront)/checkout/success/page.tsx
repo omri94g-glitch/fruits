@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
+import { PurchaseTracker } from "@/components/storefront/PurchaseTracker";
 
 export default async function CheckoutSuccessPage({
   searchParams,
@@ -10,6 +11,7 @@ export default async function CheckoutSuccessPage({
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-24 text-center flex flex-col items-center gap-4">
+      {order && <PurchaseTracker orderNumber={order} />}
       <CheckCircle2 size={48} className="text-green-700" />
       <h1 className="font-serif text-3xl text-ink">ההזמנה התקבלה בהצלחה!</h1>
       {order && (

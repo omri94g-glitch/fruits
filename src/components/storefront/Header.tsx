@@ -15,7 +15,7 @@ function SearchParamsListener({ onChange }: { onChange: (qs: string) => void }) 
 }
 
 export function Header() {
-  const { itemCount } = useCart();
+  const { itemCount, open: openCart } = useCart();
   const pathname = usePathname();
   const [queryString, setQueryString] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -99,14 +99,15 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-5">
-            <Link
-              href="/cart"
+            <button
+              type="button"
+              onClick={openCart}
               className="flex items-center gap-1.5 text-ink hover:text-green-700 transition-colors"
-              aria-label="עגלת קניות"
+              aria-label="פתיחת עגלת קניות"
             >
               <ShoppingBag size={19} />
               <span className="text-sm">{itemCount}</span>
-            </Link>
+            </button>
             <button
               type="button"
               onClick={() => setMobileOpen((v) => !v)}

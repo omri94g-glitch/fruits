@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Assistant, Frank_Ruhl_Libre } from "next/font/google";
 import { CartProvider } from "@/lib/cart-context";
+import { QuickOrderProvider } from "@/lib/quick-order-context";
+import { Analytics } from "@/components/Analytics";
 import "./globals.css";
 
 const assistant = Assistant({
@@ -27,7 +29,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${assistant.variable} ${frankRuhlLibre.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-cream text-ink font-sans">
-        <CartProvider>{children}</CartProvider>
+        <Analytics />
+        <CartProvider>
+          <QuickOrderProvider>{children}</QuickOrderProvider>
+        </CartProvider>
       </body>
     </html>
   );

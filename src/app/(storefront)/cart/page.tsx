@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Minus, Plus, Trash2 } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
-import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+import { CartItemsList } from "@/components/storefront/CartItemsList";
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, subtotal } = useCart();
+  const { items, subtotal, delivery, setDelivery } = useCart();
 
   if (items.length === 0) {
     return (
@@ -26,56 +25,36 @@ export default function CartPage() {
     <div className="mx-auto max-w-3xl px-4 py-14">
       <h1 className="font-serif text-3xl text-ink mb-8 text-center">עגלת קניות</h1>
 
-      <div className="flex flex-col gap-4">
-        {items.map((item) => (
-          <div
-            key={`${item.productId}-${item.variantId}`}
-            className="flex gap-4 border border-line rounded-2xl p-4"
-          >
-            <PlaceholderImage className="w-20 h-20 rounded-xl shrink-0" />
+      <CartItemsList />
 
-            <div className="flex-1 min-w-0 flex flex-col gap-3">
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <p className="font-medium truncate">{item.name}</p>
-                  <p className="text-sm text-ink-muted">{item.variantLabel}</p>
-                </div>
-                <button
-                  type="button"
-                  aria-label="הסרה מהעגלה"
-                  onClick={() => removeItem(item.productId, item.variantId)}
-                  className="shrink-0 text-ink-muted hover:text-red-600"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 border border-line rounded-full px-2 py-1">
-                  <button
-                    type="button"
-                    aria-label="הפחת כמות"
-                    onClick={() => updateQuantity(item.productId, item.variantId, item.quantity - 1)}
-                    className="text-ink-muted hover:text-green-700"
-                  >
-                    <Minus size={14} />
-                  </button>
-                  <span className="w-4 text-center text-sm">{item.quantity}</span>
-                  <button
-                    type="button"
-                    aria-label="הוסף כמות"
-                    onClick={() => updateQuantity(item.productId, item.variantId, item.quantity + 1)}
-                    className="text-ink-muted hover:text-green-700"
-                  >
-                    <Plus size={14} />
-                  </button>
-                </div>
-
-                <span className="text-sm font-medium text-ink">{item.price * item.quantity} ₪</span>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="flex flex-col gap-4 mt-6">
+        <label className="flex flex-col gap-1.5 text-sm">
+          <span className="text-ink-muted">עיר משלוח</span>
+          <input
+            type="text"
+            value={delivery.deliveryCity}
+            onChange={(e) => setDelivery({ deliveryCity: e.target.value })}
+            className="rounded-xl border border-line px-4 py-2.5 outline-none focus:ring-1 focus:ring-green-700 bg-cream"
+          />
+        </label>
+        <label className="flex flex-col gap-1.5 text-sm">
+          <span className="text-ink-muted">תאריך משלוח מבוקש</span>
+          <input
+            type="date"
+            value={delivery.deliveryDate}
+            onChange={(e) => setDelivery({ deliveryDate: e.target.value })}
+            className="rounded-xl border border-line px-4 py-2.5 outline-none focus:ring-1 focus:ring-green-700 bg-cream"
+          />
+        </label>
+        <label className="flex flex-col gap-1.5 text-sm">
+          <span className="text-ink-muted">ברכה אישית (לא חובה)</span>
+          <input
+            type="text"
+            value={delivery.cardMessage}
+            onChange={(e) => setDelivery({ cardMessage: e.target.value })}
+            className="rounded-xl border border-line px-4 py-2.5 outline-none focus:ring-1 focus:ring-green-700 bg-cream"
+          />
+        </label>
       </div>
 
       <div className="flex items-center justify-between mt-8 border-t border-line pt-6">

@@ -5,14 +5,19 @@ import { ProductCard } from "@/components/storefront/ProductCard";
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string; occasion?: string }>;
 }) {
-  const { category } = await searchParams;
+  const { category, occasion } = await searchParams;
 
   const [products, categories] = await Promise.all([
     db.product.findMany({
-      where: { isActive: true, ...(category ? { category } : {}) },
+      where: {
+        isActive: true,
+        ...(category ? { category } : {}),
+        ...(occasion ? { occasionTags: { has: occasion } } : {}),
+      },
       orderBy: { createdAt: "asc" },
+      include: { variants: true },
     }),
     db.product.findMany({
       where: { isActive: true },
@@ -27,6 +32,17 @@ export default async function ProductsPage({
         <span className="text-xs tracking-[0.25em] text-gold uppercase">Our Collection</span>
         <h1 className="font-serif text-3xl text-ink mt-2">כל המגשים</h1>
       </div>
+
+      {occasion && (
+        <div className="flex justify-center mb-6">
+          <Link
+            href={category ? `/products?category=${encodeURIComponent(category)}` : "/products"}
+            className="inline-flex items-center gap-2 rounded-full bg-cream-alt px-4 py-1.5 text-sm text-ink-muted hover:text-ink transition-colors"
+          >
+            מציגים עבור: {occasion} ✕
+          </Link>
+        </div>
+      )}
 
       <div className="flex flex-wrap justify-center gap-3 mb-10">
         <Link
@@ -59,7 +75,21 @@ export default async function ProductsPage({
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((p) => (
-            <ProductCard key={p.id} slug={p.slug} name={p.name} fromPrice={Number(p.basePrice)} />
+            <ProductCard
+              key={p.id}
+              productId={p.id}
+              slug={p.slug}
+              name={p.name}
+              description={p.description}
+              fromPrice={Number(p.basePrice)}
+              badges={p.badges}
+              variants={p.variants.map((v) => ({
+                id: v.id,
+                label: v.label,
+                price: Number(v.price),
+                servesLabel: v.servesLabel,
+              }))}
+            />
           ))}
         </div>
       )}

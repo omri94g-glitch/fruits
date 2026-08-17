@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { Heart, Leaf, ShieldCheck, Truck } from "lucide-react";
+import { Check } from "lucide-react";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+import { buildWhatsAppLink } from "@/lib/whatsapp";
 
-const badges = [
-  { icon: Truck, label: "משלוחים טריים\nלכל הארץ" },
-  { icon: Heart, label: "מוכן באהבה\nלעין ולחיך" },
-  { icon: Leaf, label: "פירות טריים\nבכל יום" },
-  { icon: ShieldCheck, label: "איכות ללא\nפשרות" },
+const trustItems = [
+  "הכנה טרייה ביום המשלוח",
+  "תשלום מאובטח",
+  "שירות אישי",
+  "משלוחים מהירים",
 ];
 
 export function Hero() {
@@ -22,29 +23,35 @@ export function Hero() {
           Premium Fruit Platters
         </span>
         <h1 className="font-serif text-4xl md:text-5xl leading-tight text-ink">
-          מגשי פירות
-          <br />
-          טריים. יפים. טעימים.
+          מגש פירות שהופך כל רגע לחגיגה
         </h1>
-        <p className="text-ink-muted">בהכנה ידנית אנו יוצרים מגשי פירות איכותיים</p>
+        <p className="text-ink-muted">פירות טריים, חיתוך מוקפד ומשלוח עד הדלת</p>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
-          {badges.map(({ icon: Icon, label }) => (
-            <div key={label} className="flex flex-col items-center gap-2 text-center">
-              <span className="flex items-center justify-center w-11 h-11 rounded-full bg-cream-alt text-ink">
-                <Icon size={20} />
-              </span>
-              <span className="text-xs text-ink-muted whitespace-pre-line">{label}</span>
-            </div>
-          ))}
+        <div className="flex flex-col sm:flex-row gap-3 pt-2 w-full sm:w-auto">
+          <Link
+            href="/products"
+            className="rounded-full bg-green-700 text-cream px-8 py-3 text-sm text-center hover:bg-green-600 transition-colors"
+          >
+            לבחירת מגש
+          </Link>
+          <a
+            href={buildWhatsAppLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-green-700 text-green-700 px-8 py-3 text-sm text-center hover:bg-green-700 hover:text-cream transition-colors"
+          >
+            הזמנה מהירה בוואטסאפ
+          </a>
         </div>
 
-        <Link
-          href="/products"
-          className="mt-4 inline-block rounded-full bg-green-700 text-cream px-8 py-3 text-sm hover:bg-green-600 transition-colors"
-        >
-          הזמינו עכשיו
-        </Link>
+        <ul className="flex flex-wrap justify-center md:justify-start gap-x-5 gap-y-2 pt-2">
+          {trustItems.map((item) => (
+            <li key={item} className="flex items-center gap-1.5 text-xs text-ink-muted">
+              <Check size={14} className="text-green-700 shrink-0" />
+              {item}
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
