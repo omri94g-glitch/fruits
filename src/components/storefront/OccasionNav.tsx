@@ -19,13 +19,17 @@ export function OccasionNav() {
         לאיזה רגע אתם מזמינים?
       </h2>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4
+          sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:grid-cols-3 lg:grid-cols-5 sm:overflow-visible
+          [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         {occasions.map((occasion) => (
           <Link
             key={occasion.label}
             href={`/products?occasion=${encodeURIComponent(occasion.label)}`}
             onClick={() => trackEvent("select_occasion", { occasion: occasion.label })}
-            className="group flex flex-col gap-2"
+            className="group flex flex-col gap-2 shrink-0 w-32 snap-start sm:w-auto"
           >
             <PlaceholderImage
               src={occasion.image}
