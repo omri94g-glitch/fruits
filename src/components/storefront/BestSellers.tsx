@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { db } from "@/lib/db";
 import { ProductCard } from "./ProductCard";
 
@@ -13,7 +14,13 @@ export async function BestSellers() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-12">
       <div className="text-center mb-10">
-        <span className="text-xs tracking-[0.25em] text-gold uppercase">Best Sellers</span>
+        <Image
+          src="/images/best-sellers-heading.png"
+          alt="Best Sellers"
+          width={1499}
+          height={502}
+          className="mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md h-auto"
+        />
         <h2 className="font-serif text-3xl text-ink mt-2">המגשים שהלקוחות שלנו הכי אוהבים</h2>
       </div>
 

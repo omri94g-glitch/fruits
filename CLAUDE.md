@@ -129,7 +129,15 @@ the same ink color as a heading, just smaller/regular-weight.
   the asset (aspect ratio changed from ~8:1 to ~3.17:1 once the divider was
   added — `width`/`height` props on the `<Image>` were updated to match, and
   the rendered height at the same `max-w-*` is proportionally taller now,
-  which is expected, not a regression).
+  which is expected, not a regression). `BestSellers.tsx` got the same
+  treatment for its "Best Sellers" **eyebrow label only** (not the real `<h2>`
+  below it, "המגשים שהלקוחות שלנו הכי אוהבים", which stays DOM text) —
+  `public/images/best-sellers-heading.png`, same leaf-divider style, `alt="Best
+  Sellers"` since there's no separate sr-only element needed here (the label
+  was already just a decorative sub-heading above the real `<h2>`, not itself
+  a heading landmark). Expect more of the small eyebrow-style labels
+  site-wide to get swapped to this same image treatment over time — check for
+  this pattern before assuming a label is meant to stay plain text.
 - **"Transparent" AI exports need verification, not trust — but don't assume
   they're always fake either**: most transparent-background images the user
   has supplied so far (both hero banners, the first occasion heading)
