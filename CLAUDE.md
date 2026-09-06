@@ -117,22 +117,33 @@ the same ink color as a heading, just smaller/regular-weight.
   Button styling itself (pill shape, green-700/outline fills) is unchanged
   and stays legible directly against the light marble backdrop.
 - **Image-as-heading pattern**: `OccasionNav.tsx`'s "לאיזה רגע אתם מזמינים?"
-  heading is `public/images/occasion-heading.png` (transparent PNG, same
-  script-serif calligraphy style as the hero banner text) instead of DOM text
-  — the user is standardizing section headings on this hand-lettered style
+  heading is `public/images/occasion-heading-v2.png` (transparent PNG, same
+  script-serif calligraphy style as the hero banner text, now with a small
+  green leaf-and-line divider baked in below the text) instead of DOM text —
+  the user is standardizing section headings on this hand-lettered style
   rather than `font-serif` CSS text. Same accessibility pattern as the hero:
   a real `<h2 className="sr-only">` with the same copy stays in the DOM,
   image gets `alt=""` since it's redundant with the sr-only heading. If more
   section headings get this treatment, keep this pattern (sr-only heading +
-  decorative image) rather than dropping the semantic heading.
-- **"Transparent" AI exports need verification, not trust**: every
-  transparent-background image the user has supplied so far (hero banner,
-  this occasion heading) actually shipped as flat RGB with a checkerboard
-  baked into the pixels, not a real alpha channel — `sips -g hasAlpha` or PIL
-  (`img.mode` / `'transparency' in img.info`) will show the truth in two
-  seconds. Before wiring in any "transparent" user-supplied PNG, check for
-  real alpha first; if it's fake, rebuild it by color-keying out the
-  near-neutral, high-brightness checkerboard pixels (this repo's working
+  decorative image) rather than dropping the semantic heading. This is v2 of
+  the asset (aspect ratio changed from ~8:1 to ~3.17:1 once the divider was
+  added — `width`/`height` props on the `<Image>` were updated to match, and
+  the rendered height at the same `max-w-*` is proportionally taller now,
+  which is expected, not a regression).
+- **"Transparent" AI exports need verification, not trust — but don't assume
+  they're always fake either**: most transparent-background images the user
+  has supplied so far (both hero banners, the first occasion heading)
+  actually shipped as flat RGB with a checkerboard or flat-white background
+  baked into the pixels, not a real alpha channel. But `occasion-heading-v2`
+  came through with genuine `RGBA` and a real alpha spread (checked via PIL:
+  `img.mode`, and the fraction of pixels at alpha 0 vs 255 vs partial) — so
+  the fix isn't "always rebuild it," it's "always check first." `sips -g
+  hasAlpha` or PIL (`img.mode` / `'transparency' in img.info`, then actually
+  inspect the alpha channel's value distribution, not just its presence) will
+  show the truth in two seconds. Before wiring in any "transparent"
+  user-supplied PNG, check for real alpha first; only if it's fake, rebuild it
+  by color-keying out the near-neutral, high-brightness checkerboard pixels
+  (this repo's working
   threshold: `spread(max-min per pixel) <= 4` and `min-channel >= 225`), then
   verify by compositing onto a solid color and visually checking for holes in
   the real artwork before shipping.
