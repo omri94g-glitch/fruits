@@ -31,11 +31,11 @@ export function Hero() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 pt-8 pb-12 flex flex-col items-center gap-8">
-        <h1 className="sr-only">מגש פירות שהופך כל רגע לחגיגה</h1>
+        <h1 className="sr-only">מגשי פירות מעוצבים לכל אירוע</h1>
 
         <Image
-          src="/images/hero-banner-transparent.png"
-          alt="מגש פירות שהופך כל רגע לחגיגה - פירות טריים, חיתוך מוקפד ומשלוח עד הדלת"
+          src="/images/hero-banner-v2.png"
+          alt="מגשי פירות מעוצבים לכל אירוע"
           width={1930}
           height={815}
           priority

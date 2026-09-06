@@ -85,25 +85,29 @@ the same ink color as a heading, just smaller/regular-weight.
   on text, buttons, or UI chrome elsewhere — those stay on the disciplined
   token palette above.
 - **Hero banner image**: inside that section, `Hero.tsx` renders one
-  full-width image (`public/images/hero-banner-transparent.png`, 1930×815,
-  true alpha transparency) with the headline baked into the graphic instead of
-  separate eyebrow/h1/subtitle DOM text — only the logo/fruit-corner/text
-  artwork is opaque, so the fixed `cta-frame.png`/`hero-bg-mobile.png`
-  background behind it shows through and the two read as one continuous
-  backdrop instead of a card sitting on a card. This started as an
-  AI-generated banner with an opaque marble background and a checkerboard
-  ("transparent") export that turned out to have no real alpha channel (flat
-  gray/white pixels baked in, confirmed via PIL — `sips`/most viewers render
-  a checkerboard for missing alpha, so don't assume a "transparent" export
-  actually has one); we regenerated true transparency by color-keying out the
-  near-neutral, high-brightness checkerboard pixels (`spread<=4 & min>=225`)
-  and left everything else — including whites inside the artwork like
-  watermelon rind — opaque. If a similar "transparent" export ever looks
-  wrong, check for an alpha channel before trusting it. The image includes
-  its own baked-in "R FRUITS" cartoon logo mark, which sits alongside the
-  real header wordmark logo rather than replacing it; this is a known,
-  deliberate inconsistency the user chose to keep, not an oversight. Swap for
-  real photography/graphic design later. Because the headline text lives
+  full-width image (`public/images/hero-banner-v2.png`, 1930×815, true alpha
+  transparency, headline "מגשי פירות מעוצבים לכל אירוע") with the headline
+  baked into the graphic instead of separate eyebrow/h1/subtitle DOM text —
+  only the logo/fruit-corner/text artwork is opaque, so the fixed
+  `cta-frame.png`/`hero-bg-mobile.png` background behind it shows through and
+  the two read as one continuous backdrop instead of a card sitting on a
+  card. Superseded an earlier version (`hero-banner-transparent.png`, deleted,
+  headline "מגש פירות שהופך כל רגע לחגיגה") the same way: the user's source
+  export had a plain flat-white (this round) or checkerboard (first round)
+  background baked into ordinary RGB pixels with no real alpha channel
+  (confirmed via PIL — `sips`/most viewers render white or a checkerboard for
+  missing alpha, so don't assume a "transparent" export actually has one); we
+  regenerate true transparency by color-keying out the near-neutral,
+  high-brightness background pixels (`spread<=4 & min>=225`) and leave
+  everything else — including whites inside the artwork like watermelon rind
+  — opaque. Expect this banner to keep changing as the user iterates on
+  copy/art — repeat this same verify-then-color-key routine each time, don't
+  assume a later export finally has real alpha. If a "transparent" export ever
+  looks wrong once wired in, check for an alpha channel before trusting it.
+  The image includes its own baked-in "R.FRUITS" cartoon logo mark, which sits
+  alongside the real header wordmark logo rather than replacing it; this is a
+  known, deliberate inconsistency the user chose to keep, not an oversight.
+  Swap for real photography/graphic design later. Because the headline text lives
   inside the image, a real `<h1 className="sr-only">` with the same copy
   stays in the DOM for accessibility/SEO, and the `<Image>` gets full
   descriptive `alt` text — don't drop either when touching this component.
