@@ -15,11 +15,11 @@ export async function BestSellers() {
     <section className="mx-auto max-w-7xl px-4 py-12">
       <div className="text-center mb-10">
         <Image
-          src="/images/best-sellers-heading.png"
+          src="/images/best-sellers-heading-v2.png"
           alt="Best Sellers"
-          width={1499}
-          height={502}
-          className="mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md h-auto"
+          width={1422}
+          height={507}
+          className="mx-auto w-full max-w-[140px] sm:max-w-[160px] md:max-w-[190px] h-auto"
         />
         <h2 className="font-serif text-3xl text-ink mt-2">המגשים שהלקוחות שלנו הכי אוהבים</h2>
       </div>
