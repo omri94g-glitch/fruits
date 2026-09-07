@@ -159,12 +159,17 @@ the same ink color as a heading, just smaller/regular-weight.
   added — `width`/`height` props on the `<Image>` were updated to match, and
   the rendered height at the same `max-w-*` is proportionally taller now,
   which is expected, not a regression). `BestSellers.tsx` got the same
-  treatment for its "Best Sellers" **eyebrow label only** (not the real `<h2>`
-  below it, "המגשים שהלקוחות שלנו הכי אוהבים", which stays DOM text) —
+  treatment for its "Best Sellers" eyebrow label —
   `public/images/best-sellers-heading-v2.png`, same leaf-divider style,
-  `alt="Best Sellers"` since there's no separate sr-only element needed here
-  (the label was already just a decorative sub-heading above the real `<h2>`,
-  not itself a heading landmark). **All these hand-lettered heading images
+  `alt="Best Sellers"`. The real `<h2>` below it ("המגשים שהלקוחות שלנו הכי
+  אוהבים") was originally visible DOM text but the user asked to remove it
+  for a cleaner look — it's now `sr-only` rather than deleted outright
+  (same accessibility pattern as the hero/occasion headings: keep a real
+  heading in the DOM for a11y/SEO even when nothing about it is visible).
+  Don't delete this `sr-only` heading entirely if asked to "clean up" this
+  section further — hide it further only by adding to `sr-only`'s existing
+  clip/absolute-position technique, never by removing the element. **All
+  these hand-lettered heading images
   should read as the same visual weight** — the user explicitly rejected an
   earlier attempt to size this one much smaller (`max-w-[140px..190px]`) on
   the theory that an eyebrow label should stay visually subordinate to a real

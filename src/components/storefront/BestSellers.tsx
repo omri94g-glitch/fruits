@@ -21,7 +21,7 @@ export async function BestSellers() {
           height={507}
           className="mx-auto w-full max-w-[280px] sm:max-w-[335px] md:max-w-[395px] h-auto"
         />
-        <h2 className="font-serif text-3xl text-ink mt-2">המגשים שהלקוחות שלנו הכי אוהבים</h2>
+        <h2 className="sr-only">המגשים שהלקוחות שלנו הכי אוהבים</h2>
       </div>
 
       {products.length === 0 ? (
