@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Check } from "lucide-react";
+import { Leaf } from "lucide-react";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 const trustItems = [
@@ -63,8 +63,8 @@ export function Hero() {
 
           <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2">
             {trustItems.map((item) => (
-              <li key={item} className="flex items-center gap-1.5 text-xs text-ink-muted">
-                <Check size={14} className="text-green-700 shrink-0" />
+              <li key={item} className="flex items-center gap-1.5 text-sm font-medium text-ink">
+                <Leaf size={16} fill="currentColor" className="text-green-700 shrink-0" />
                 {item}
               </li>
             ))}

@@ -276,6 +276,21 @@ the same ink color as a heading, just smaller/regular-weight.
 - Icons: `lucide-react`, thin stroke (default strokeWidth), 14–22px depending
   on context. No filled icon styles. Brand icons (Instagram/Facebook) come from
   `components/ui/brand-icons.tsx`, not lucide (lucide dropped brand marks).
+  **One deliberate exception**: `Hero.tsx`'s trust-items list (`הכנה טרייה
+  ביום המשלוח` / `תשלום מאובטח` / `שירות אישי` / `משלוחים מהירים`) uses a
+  filled `Leaf` icon (`fill="currentColor"`) with bolder text
+  (`text-sm font-medium text-ink`, not `text-xs text-ink-muted`) instead of
+  the outline `Check` icon it used before. This was meant to match a
+  hand-lettered leaf-icon graphic the user supplied, matching the leaf motif
+  used in the other hero-adjacent images (`cta-frame.png`'s divider,
+  `occasion-heading-v2.png`, etc.) — but the actual image never made it to
+  disk (pasted twice, neither attempt saved; a real, unresolved limitation of
+  this environment/session, not something fixable from the codebase side), so
+  this is a **CSS/icon-only reconstruction of the same visual idea**, not the
+  literal supplied asset. If the user provides that file later (as an actual
+  reachable path, not a chat paste), swap this back to an `<Image>` using the
+  same pattern as the other sections in this list, matching their intent
+  more exactly.
 
 ## Accessibility
 - Body text and buttons meet WCAG AA (ink `#1B1D14` on cream `#FBF9F6` is
