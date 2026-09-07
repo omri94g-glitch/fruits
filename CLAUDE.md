@@ -66,6 +66,17 @@ the same ink color as a heading, just smaller/regular-weight.
   original rhythm read as too much dead air between sections on both mobile
   and desktop.
 - Card/grid gap: `gap-6` for product grids, `gap-4` for tight lists.
+- **OccasionNav's desktop grid matches BestSellers' scale**: both use
+  `sm:grid sm:grid-cols-3 sm:gap-6` (BestSellers additionally has
+  `lg:grid-cols-3`, i.e. never more than 3 columns) — OccasionNav previously
+  bumped to `lg:grid-cols-5`, which produced visibly smaller/thinner cards
+  than BestSellers at the same container width; the user flagged the size
+  mismatch as looking "cluttered" next to BestSellers' bigger cards. 5
+  occasion cards in a 3-column grid leaves an intentionally uneven last row
+  (2 items, RTL so they sit at the right) — that's an accepted tradeoff for
+  matching card scale, not a bug to fix. Below `sm`, OccasionNav stays a
+  horizontally swipeable flex strip (`overflow-x-auto snap-x snap-mandatory`)
+  — don't apply this grid-matching change to the mobile layout.
 - **Hero section background**: `Hero.tsx` has a full-bleed `fixed inset-0
   -z-10` background layer — a marble/fruit-corner photo
   (`public/images/cta-frame.png` on `sm:` and up, `public/images/hero-bg-
