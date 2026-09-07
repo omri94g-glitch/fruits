@@ -113,6 +113,15 @@ the same ink color as a heading, just smaller/regular-weight.
   Keep photographic color accents contained to this backdrop, never as a fill
   on text, buttons, or UI chrome elsewhere — those stay on the disciplined
   token palette above.
+- **Homepage section order** (`(storefront)/page.tsx`): `Hero`, `OccasionNav`,
+  `BestSellers`, `HowItArrives`, `Reviews`, `EventsBusinessBand`, `FAQ`,
+  `FinalCTA`, `FeatureStrip` — in that order, with `FeatureStrip` (the
+  "למה לבחור ב-Rfruits" icon strip) deliberately last, directly above the
+  footer. It used to sit right after `HowItArrives`; the user asked to move
+  it to the very bottom of the page. `FeatureStrip`'s own `bg-cream-alt`
+  and `FinalCTA`'s `bg-green-900` are both self-contained opaque sections, so
+  reordering them needs no extra styling — don't move `FeatureStrip` back up
+  without being asked.
 - **Hero banner image**: inside that section, `Hero.tsx` renders one
   full-width image (`public/images/hero-banner-v2.png`, 1930×815, true alpha
   transparency, headline "מגשי פירות מעוצבים לכל אירוע") with the headline

@@ -20,11 +20,11 @@ export default function HomePage() {
         <OccasionNav />
         <BestSellers />
         <HowItArrives />
-        <FeatureStrip />
         <Reviews />
         <EventsBusinessBand />
         <FAQ />
         <FinalCTA />
+        <FeatureStrip />
       </div>
     </>
   );
