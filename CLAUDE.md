@@ -135,18 +135,18 @@ the same ink color as a heading, just smaller/regular-weight.
   `public/images/best-sellers-heading-v2.png`, same leaf-divider style,
   `alt="Best Sellers"` since there's no separate sr-only element needed here
   (the label was already just a decorative sub-heading above the real `<h2>`,
-  not itself a heading landmark). **Sized much smaller than the h2-replacement
-  images** — `max-w-[140px] sm:max-w-[160px] md:max-w-[190px]`, not
-  `max-w-xs/sm/md` — because an eyebrow label sitting above a real heading
-  should stay visually subordinate to it; the first version at heading-scale
-  read as too big/dominant for its role. When converting an eyebrow-style
-  label (small, sits above a real heading) to this image pattern, default to
-  this smaller size band; reserve the larger `max-w-xs/sm/md` band for images
-  that replace an actual heading (h1/h2) with no text below competing for
-  visual weight. Expect more of the small eyebrow-style labels site-wide to
-  get swapped to this same image treatment over time — check for this pattern
-  before assuming a label is meant to stay plain text, and default new ones to
-  the small size band unless told otherwise.
+  not itself a heading landmark). **All these hand-lettered heading images
+  share one size band: `max-w-xs sm:max-w-sm md:max-w-md`.** An earlier
+  version sized this one much smaller (`max-w-[140px..190px]`) on the theory
+  that an eyebrow label should stay visually subordinate to a real heading —
+  the user explicitly rejected that: every section's hand-lettered image
+  should read as the same visual weight regardless of whether DOM text sits
+  below it. Don't reintroduce a smaller size band for "eyebrow-style" ones;
+  use the shared `max-w-xs/sm/md` size for every image in this pattern, and
+  let each asset's own aspect ratio (not custom width targets) account for
+  any height difference between them. Expect more labels site-wide to get
+  swapped to this same image treatment over time — give each one this same
+  shared size by default.
 - **"Transparent" AI exports need verification, not trust — but don't assume
   they're always fake either**: most transparent-background images the user
   has supplied so far (both hero banners, the first occasion heading)
