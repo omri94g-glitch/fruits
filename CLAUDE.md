@@ -202,6 +202,16 @@ the same ink color as a heading, just smaller/regular-weight.
   bakes together multiple adjacent text elements like this, look for which
   DOM elements it actually replaces content-wise (by reading the image, not
   by assuming 1 image = 1 element) rather than guessing from position alone.
+- **`Reviews.tsx` ("לקוחות מספרים" / "מה אומרים עלינו")**:
+  `public/images/reviews-heading.png` replaces both the eyebrow (`span`,
+  "לקוחות מספרים") and the real `<h2>` ("מה אומרים עלינו") — unlike
+  `HowItArrives`, here the image bakes in the *heading itself*, not a
+  paragraph, so the `<h2>` becomes `sr-only` (not deleted) rather than
+  staying visible between two image pieces. The honest empty-state paragraph
+  ("אנחנו אוספים ביקורות מלקוחות...") is unrelated dynamic content (not part
+  of the graphic) and stays untouched as real, visible DOM text — never
+  fold real/conditional copy like that into a decorative image, only
+  static labels/headings.
 - **"Transparent" AI exports need verification, not trust — but don't assume
   they're always fake either**: most transparent-background images the user
   has supplied so far (both hero banners, the first occasion heading)

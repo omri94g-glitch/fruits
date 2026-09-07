@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Star } from "lucide-react";
 import { db } from "@/lib/db";
 
@@ -10,8 +11,14 @@ export async function Reviews({ productId }: { productId?: string } = {}) {
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 text-center">
-      <span className="text-xs tracking-[0.25em] text-gold uppercase">לקוחות מספרים</span>
-      <h2 className="font-serif text-2xl md:text-3xl text-ink mt-2">מה אומרים עלינו</h2>
+      <h2 className="sr-only">מה אומרים עלינו</h2>
+      <Image
+        src="/images/reviews-heading.png"
+        alt="לקוחות מספרים - מה אומרים עלינו"
+        width={1327}
+        height={556}
+        className="mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md h-auto"
+      />
 
       {reviews.length === 0 ? (
         <p className="text-ink-muted mt-6 max-w-md mx-auto">
