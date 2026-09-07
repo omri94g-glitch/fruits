@@ -70,21 +70,31 @@ the same ink color as a heading, just smaller/regular-weight.
   sections use the same structure — below `sm`, a horizontally swipeable flex
   strip (`flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4
   [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`, each item `shrink-0
-  w-32` for occasions / `w-44` for product cards); from `sm` up, a CSS grid
-  that fits **every item on one row, no wrapping** — OccasionNav is
-  `sm:grid-cols-3 lg:grid-cols-5` (5 occasions), BestSellers is
-  `sm:grid-cols-3 lg:grid-cols-6` (up to 6 products). This is a deliberate,
-  explicit user requirement: **items must stay in a single row on desktop
-  and be swipeable on mobile — never wrap into multiple rows.** An earlier
-  attempt capped both at 3 columns (matching card *scale* so neither section
-  looked bigger/smaller than the other) and the user rejected it hard — they
-  want the original single-row-everything-visible layout, not a wrapped
-  grid, regardless of resulting card size. Don't reintroduce column caps
-  that force wrapping (e.g. `lg:grid-cols-3` on a 5+ item row) on either of
-  these two sections. `BestSellers.tsx` wraps each `<ProductCard>` in a
-  `<div className="shrink-0 w-44 snap-start sm:w-auto">` for this — don't
-  move that sizing into `ProductCard` itself, since it's also used
-  full-width elsewhere (e.g. `/products` listing grid).
+  w-32` for occasions / `w-44` for product cards); from `sm` up, **every item
+  stays on one row, no wrapping**. This is a deliberate, explicit user
+  requirement — items must stay in a single row on desktop and be swipeable
+  on mobile, regardless of resulting card size. An earlier attempt capped
+  both at 3 columns to match card *scale* between sections and the user
+  rejected it hard; a later attempt used a fixed `lg:grid-cols-N` (5 for
+  occasions, 6 for products) sized to the *expected* item count, which
+  worked for OccasionNav (exactly 5 hardcoded occasions, always matches) but
+  broke centering for BestSellers, whose item count is a live DB query
+  (`isBestSeller` products, currently 5 but could become 1–6) — with fewer
+  items than grid columns, `grid-cols-N`'s unfilled 1fr track sits empty on
+  one side rather than shrinking, so the row reads as shoved toward the
+  RTL start (right) instead of centered. **OccasionNav** (fixed 5-item array)
+  keeps the simple grid: `sm:grid-cols-3 lg:grid-cols-5`. **BestSellers**
+  (dynamic count) instead uses `sm:flex-wrap sm:justify-center sm:gap-6` on
+  the container with each item sized `sm:w-[calc(33.333%-1rem)]
+  lg:w-[calc(16.666%-1.25rem)]` — flex-basis-style percentage widths center
+  correctly no matter how many products actually render, so this doesn't
+  need revisiting if the best-seller count changes. When adding a new
+  single-row section with a *fixed*, hardcoded item list, the simple grid is
+  fine; when the count comes from a query, use this flex + justify-center +
+  percentage-width pattern instead, not `grid-cols-N`. `BestSellers.tsx`
+  wraps each `<ProductCard>` in a sized `<div>` for this — don't move that
+  sizing into `ProductCard` itself, since it's also used full-width
+  elsewhere (e.g. `/products` listing grid).
 - **Hero section background**: `Hero.tsx` has a full-bleed `fixed inset-0
   -z-10` background layer — a marble/fruit-corner photo
   (`public/images/cta-frame.png` on `sm:` and up, `public/images/hero-bg-

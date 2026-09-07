@@ -29,11 +29,15 @@ export async function BestSellers() {
       ) : (
         <div
           className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4
-            sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:grid-cols-3 lg:grid-cols-6 sm:gap-6 sm:overflow-visible
+            sm:mx-0 sm:px-0 sm:pb-0 sm:flex-wrap sm:justify-center sm:gap-6 sm:overflow-visible
             [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {products.map((p) => (
-            <div key={p.id} className="shrink-0 w-44 snap-start sm:w-auto">
+            <div
+              key={p.id}
+              className="shrink-0 w-44 snap-start
+                sm:w-[calc(33.333%-1rem)] lg:w-[calc(16.666%-1.25rem)]"
+            >
               <ProductCard
                 productId={p.id}
                 slug={p.slug}
