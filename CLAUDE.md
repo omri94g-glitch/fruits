@@ -136,17 +136,25 @@ the same ink color as a heading, just smaller/regular-weight.
   `alt="Best Sellers"` since there's no separate sr-only element needed here
   (the label was already just a decorative sub-heading above the real `<h2>`,
   not itself a heading landmark). **All these hand-lettered heading images
-  share one size band: `max-w-xs sm:max-w-sm md:max-w-md`.** An earlier
-  version sized this one much smaller (`max-w-[140px..190px]`) on the theory
-  that an eyebrow label should stay visually subordinate to a real heading —
-  the user explicitly rejected that: every section's hand-lettered image
-  should read as the same visual weight regardless of whether DOM text sits
-  below it. Don't reintroduce a smaller size band for "eyebrow-style" ones;
-  use the shared `max-w-xs/sm/md` size for every image in this pattern, and
-  let each asset's own aspect ratio (not custom width targets) account for
-  any height difference between them. Expect more labels site-wide to get
-  swapped to this same image treatment over time — give each one this same
-  shared size by default.
+  should read as the same visual weight** — the user explicitly rejected an
+  earlier attempt to size this one much smaller (`max-w-[140px..190px]`) on
+  the theory that an eyebrow label should stay visually subordinate to a real
+  heading; every section's image should look equally prominent regardless of
+  whether DOM text sits below it. The subtlety: matching **width** isn't the
+  same as matching **visual size** when two exported assets have different
+  aspect ratios (occasion-heading-v2 is ~3.17:1, best-sellers-heading-v2 is
+  ~2.80:1) — same `max-w-md` width left best-sellers rendering visibly taller
+  (159.7px vs 141.3px), which read as "bigger" even though the widths were
+  identical. What actually needs to match is rendered **height**: occasion
+  nav's image stays the reference (`max-w-xs sm:max-w-sm md:max-w-md`
+  = 320/384/448px), and `best-sellers-heading-v2.png` is scaled down to
+  `max-w-[280px] sm:max-w-[335px] md:max-w-[395px]` (~88% width) to land at
+  the same ~141px rendered height. When adding a new heading image to this
+  pattern, don't just copy the `max-w-xs/sm/md` classes — measure its
+  rendered height at that width against the occasion-nav reference and scale
+  its own `max-w-[...]` proportionally if the aspect ratio differs. Expect
+  more labels site-wide to get swapped to this same image treatment over
+  time.
 - **"Transparent" AI exports need verification, not trust — but don't assume
   they're always fake either**: most transparent-background images the user
   has supplied so far (both hero banners, the first occasion heading)

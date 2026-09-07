@@ -19,7 +19,7 @@ export async function BestSellers() {
           alt="Best Sellers"
           width={1422}
           height={507}
-          className="mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md h-auto"
+          className="mx-auto w-full max-w-[280px] sm:max-w-[335px] md:max-w-[395px] h-auto"
         />
         <h2 className="font-serif text-3xl text-ink mt-2">המגשים שהלקוחות שלנו הכי אוהבים</h2>
       </div>
