@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 
 const shots = ["המגש המלא", "האריזה", "הברכה", "מסירת המשלוח", "המגש על שולחן אירוח"];
@@ -5,11 +6,14 @@ const shots = ["המגש המלא", "האריזה", "הברכה", "מסירת ה
 export function HowItArrives() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 text-center">
-      <span className="text-xs tracking-[0.25em] text-gold uppercase">See The Real Thing</span>
-      <h2 className="font-serif text-2xl md:text-3xl text-ink mt-2">ככה זה מגיע אליכם</h2>
-      <p className="text-ink-muted mt-2 max-w-xl mx-auto">
-        תמונות אמיתיות מהזמנות שיצאו מאיתנו - בדיוק מה שתקבלו.
-      </p>
+      <h2 className="sr-only">ככה זה מגיע אליכם</h2>
+      <Image
+        src="/images/see-real-thing-heading.png"
+        alt="See The Real Thing - תמונות אמיתיות מהזמנות שיצאו מאיתנו, בדיוק מה שתקבלו"
+        width={1500}
+        height={349}
+        className="mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md h-auto"
+      />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-8">
         {shots.map((caption) => (

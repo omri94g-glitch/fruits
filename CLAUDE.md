@@ -189,6 +189,19 @@ the same ink color as a heading, just smaller/regular-weight.
   its own `max-w-[...]` proportionally if the aspect ratio differs. Expect
   more labels site-wide to get swapped to this same image treatment over
   time.
+- **`HowItArrives.tsx` ("SEE THE REAL THING")**: this one image
+  (`public/images/see-real-thing-heading.png`) replaces **two** DOM text
+  elements at once — the eyebrow (`span`, "See The Real Thing") and the
+  paragraph below the heading ("תמונות אמיתיות מהזמנות שיצאו מאיתנו - בדיוק
+  מה שתקבלו.") — because the user's source graphic bakes both pieces of text
+  together into one image. The middle `<h2>` ("ככה זה מגיע אליכם") sits
+  between those two in the DOM/copy but is **not** part of the graphic at
+  all; it stays `sr-only` (not deleted) per the established pattern, and the
+  `<Image>` gets a descriptive `alt` combining both replaced text pieces
+  since there's no separate sr-only element for them. If a future image
+  bakes together multiple adjacent text elements like this, look for which
+  DOM elements it actually replaces content-wise (by reading the image, not
+  by assuming 1 image = 1 element) rather than guessing from position alone.
 - **"Transparent" AI exports need verification, not trust — but don't assume
   they're always fake either**: most transparent-background images the user
   has supplied so far (both hero banners, the first occasion heading)
