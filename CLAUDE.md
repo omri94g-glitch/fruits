@@ -66,8 +66,8 @@ the same ink color as a heading, just smaller/regular-weight.
   original rhythm read as too much dead air between sections on both mobile
   and desktop.
 - Card/grid gap: `gap-6` for product grids, `gap-4` for tight lists.
-- **Horizontal-row pattern, shared by OccasionNav and BestSellers**: both
-  sections use the same structure — below `sm`, a horizontally swipeable flex
+- **Horizontal-row pattern, shared by OccasionNav, BestSellers, and
+  HowItArrives**: all three sections use the same structure — below `sm`, a horizontally swipeable flex
   strip (`flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4
   [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`, each item `shrink-0
   w-32` for occasions / `w-44` for product cards); from `sm` up, **every item
@@ -94,7 +94,15 @@ the same ink color as a heading, just smaller/regular-weight.
   percentage-width pattern instead, not `grid-cols-N`. `BestSellers.tsx`
   wraps each `<ProductCard>` in a sized `<div>` for this — don't move that
   sizing into `ProductCard` itself, since it's also used full-width
-  elsewhere (e.g. `/products` listing grid).
+  elsewhere (e.g. `/products` listing grid). `HowItArrives.tsx`'s 5 photo
+  slots (fixed hardcoded array, same as OccasionNav) got this same treatment
+  — it originally used a plain wrapping `grid grid-cols-2 sm:grid-cols-3
+  lg:grid-cols-5`, which read as "cluttered" on mobile (2-up, wraps to 3
+  rows) next to the other sections' clean single-row swipe strips; now it's
+  `sm:grid-cols-3 lg:grid-cols-5` with the same swipeable-strip base as
+  OccasionNav. If more sections get added with a small fixed set of
+  image+caption items, default them to this same pattern from the start
+  rather than a plain wrapping grid.
 - **Hero section background**: `Hero.tsx` has a full-bleed `fixed inset-0
   -z-10` background layer — a marble/fruit-corner photo
   (`public/images/cta-frame.png` on `sm:` and up, `public/images/hero-bg-

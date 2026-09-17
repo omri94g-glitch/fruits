@@ -15,9 +15,13 @@ export function HowItArrives() {
         className="mx-auto w-full max-w-xs sm:max-w-sm md:max-w-md h-auto"
       />
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mt-8">
+      <div
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 mt-8
+          sm:mx-0 sm:px-0 sm:pb-0 sm:grid sm:grid-cols-3 lg:grid-cols-5 sm:overflow-visible
+          [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         {shots.map((caption) => (
-          <div key={caption} className="flex flex-col gap-2">
+          <div key={caption} className="flex flex-col gap-2 shrink-0 w-32 snap-start sm:w-auto">
             <PlaceholderImage className="aspect-square rounded-2xl w-full" />
             <span className="text-xs text-ink-muted">{caption}</span>
           </div>
