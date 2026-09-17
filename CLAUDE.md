@@ -327,3 +327,42 @@ by a real inventory system.
   order numbers, `@handle`) must be wrapped in `dir="ltr"` — otherwise the bidi
   algorithm visually reverses them (e.g. `@rfruits` → `rfruits@`). This bit us
   once already; check any new Latin/numeric fragment embedded in Hebrew flow.
+
+## Payments
+- **`/api/checkout` skips payment entirely when no gateway is configured** —
+  `isCardcomConfigured()` in `src/lib/payments/cardcom.ts` gates a bypass
+  branch that creates the order and redirects straight to
+  `/checkout/success`, built so the flow stays testable without merchant
+  credentials in local dev. **Confirmed via a live runtime check (Sep 2026):
+  `CARDCOM_TERMINAL_NUMBER`/`CARDCOM_API_NAME`/`CARDCOM_API_PASSWORD` exist as
+  entries in the Vercel project (added ~Aug 2026) but resolve empty at actual
+  runtime** — so this bypass has been silently live in *production*, not just
+  dev. Every real order taken so far went through with no payment collected.
+  This is why: don't assume "the env var exists in `vercel env ls`" means
+  it's usable — verify with a real runtime check (a throwaway diagnostic API
+  route returning only booleans/lengths, never actual secret values, deployed
+  via `vercel deploy --prod --force` without committing it, then deleted) if
+  payment/auth behavior doesn't match what the dashboard implies.
+- **PayPlus integration in progress**: the user is setting up PayPlus
+  (Israeli payment gateway, docs at https://docs.payplus.co.il) as the real
+  payment provider — likely to replace this gap, pending them sending real
+  API credentials. `src/lib/payments/payplus.ts` is a scaffold already built
+  against the *real* documented API (fetched from docs.payplus.co.il, not
+  guessed) — hosted "Payment Page" flow mirroring `cardcom.ts`'s shape:
+  `createPayPlusPayment` (`POST /PaymentPages/generateLink`, needs
+  `PAYPLUS_API_KEY`/`PAYPLUS_SECRET_KEY`/`PAYPLUS_PAYMENT_PAGE_UID` env vars),
+  `getPayPlusTransactionStatus` (`POST /Transactions/View`, status_code
+  `"000"` = approved — always re-verify server-side before trusting a
+  webhook/redirect, same principle as Cardcom), and
+  `verifyPayPlusWebhookSignature` (HMAC-SHA256 of the raw callback body with
+  the secret key, base64, compared against the `hash` header — PayPlus
+  supports real webhook signature verification, which Cardcom's flow here
+  doesn't use). **Not wired into `/api/checkout` or a webhook route yet** —
+  that's the next step once real credentials arrive, plus resolving whether
+  PayPlus replaces Cardcom outright or is offered alongside it (ask the user
+  if this hasn't been settled by the time you pick this up). The exact
+  incoming IPN callback body field names weren't fully confirmed from docs
+  (the reference pages returned request schemas, not example callback
+  payloads) — confirm those against a real sandbox transaction before
+  finalizing the webhook route, rather than assuming the scaffold's field
+  names are exactly right.
