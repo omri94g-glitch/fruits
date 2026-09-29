@@ -3,6 +3,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { generateOrderNumber } from "@/lib/order-number";
 import { createCardcomPayment, isCardcomConfigured } from "@/lib/payments/cardcom";
+import { createPayPlusPayment, isPayPlusConfigured } from "@/lib/payments/payplus";
 import { getAddOn } from "@/lib/add-ons";
 
 const checkoutSchema = z.object({
@@ -94,47 +95,87 @@ export async function POST(request: Request) {
     },
   });
 
-  if (!isCardcomConfigured()) {
-    // No payment provider configured yet (local dev without merchant credentials) -
-    // skip straight to the success page so the rest of the flow stays testable.
-    return NextResponse.json({
-      orderId: order.id,
-      orderNumber: order.orderNumber,
-      redirectUrl: `/checkout/success?order=${order.orderNumber}`,
-    });
-  }
-
   const appUrl = process.env.APP_URL || new URL(request.url).origin;
+  const successUrl = `${appUrl}/checkout/success?order=${order.orderNumber}`;
+  const failedUrl = `${appUrl}/checkout/fail?order=${order.orderNumber}`;
 
-  try {
-    const payment = await createCardcomPayment({
-      orderId: order.id,
-      orderNumber: order.orderNumber,
-      amount: totalAmount,
-      customerName: customer.name,
-      customerEmail: customer.email || undefined,
-      successUrl: `${appUrl}/checkout/success?order=${order.orderNumber}`,
-      failedUrl: `${appUrl}/checkout/fail?order=${order.orderNumber}`,
-      webhookUrl: `${appUrl}/api/payments/webhook`,
-    });
-
-    await db.order.update({
-      where: { id: order.id },
-      data: { paymentProvider: "cardcom", paymentRef: payment.lowProfileId },
-    });
-
-    return NextResponse.json({
-      orderId: order.id,
-      orderNumber: order.orderNumber,
-      redirectUrl: payment.url,
-    });
-  } catch (err) {
-    return NextResponse.json(
-      {
-        error: err instanceof Error ? err.message : "שגיאה ביצירת עסקת סליקה",
+  // PayPlus is the primary provider once configured; Cardcom stays as a
+  // fallback if it's ever configured instead/again. Neither configured ->
+  // dev-mode bypass so the rest of the flow stays testable locally.
+  if (isPayPlusConfigured()) {
+    try {
+      const payment = await createPayPlusPayment({
+        orderId: order.id,
         orderNumber: order.orderNumber,
-      },
-      { status: 502 }
-    );
+        amount: totalAmount,
+        customerName: customer.name,
+        customerEmail: customer.email || undefined,
+        customerPhone: customer.phone,
+        successUrl,
+        failedUrl,
+        webhookUrl: `${appUrl}/api/payments/webhook/payplus`,
+      });
+
+      await db.order.update({
+        where: { id: order.id },
+        data: { paymentProvider: "payplus", paymentRef: payment.transactionUid },
+      });
+
+      return NextResponse.json({
+        orderId: order.id,
+        orderNumber: order.orderNumber,
+        redirectUrl: payment.url,
+      });
+    } catch (err) {
+      return NextResponse.json(
+        {
+          error: err instanceof Error ? err.message : "שגיאה ביצירת עסקת סליקה",
+          orderNumber: order.orderNumber,
+        },
+        { status: 502 }
+      );
+    }
   }
+
+  if (isCardcomConfigured()) {
+    try {
+      const payment = await createCardcomPayment({
+        orderId: order.id,
+        orderNumber: order.orderNumber,
+        amount: totalAmount,
+        customerName: customer.name,
+        customerEmail: customer.email || undefined,
+        successUrl,
+        failedUrl,
+        webhookUrl: `${appUrl}/api/payments/webhook`,
+      });
+
+      await db.order.update({
+        where: { id: order.id },
+        data: { paymentProvider: "cardcom", paymentRef: payment.lowProfileId },
+      });
+
+      return NextResponse.json({
+        orderId: order.id,
+        orderNumber: order.orderNumber,
+        redirectUrl: payment.url,
+      });
+    } catch (err) {
+      return NextResponse.json(
+        {
+          error: err instanceof Error ? err.message : "שגיאה ביצירת עסקת סליקה",
+          orderNumber: order.orderNumber,
+        },
+        { status: 502 }
+      );
+    }
+  }
+
+  // No payment provider configured (local dev without merchant credentials) -
+  // skip straight to the success page so the rest of the flow stays testable.
+  return NextResponse.json({
+    orderId: order.id,
+    orderNumber: order.orderNumber,
+    redirectUrl: `/checkout/success?order=${order.orderNumber}`,
+  });
 }
