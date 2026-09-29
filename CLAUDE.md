@@ -351,26 +351,44 @@ by a real inventory system.
   route returning only booleans/lengths, never actual secret values, deployed
   via `vercel deploy --prod --force` without committing it, then deleted) if
   payment/auth behavior doesn't match what the dashboard implies.
-- **PayPlus integration in progress**: the user is setting up PayPlus
-  (Israeli payment gateway, docs at https://docs.payplus.co.il) as the real
-  payment provider — likely to replace this gap, pending them sending real
-  API credentials. `src/lib/payments/payplus.ts` is a scaffold already built
-  against the *real* documented API (fetched from docs.payplus.co.il, not
-  guessed) — hosted "Payment Page" flow mirroring `cardcom.ts`'s shape:
-  `createPayPlusPayment` (`POST /PaymentPages/generateLink`, needs
-  `PAYPLUS_API_KEY`/`PAYPLUS_SECRET_KEY`/`PAYPLUS_PAYMENT_PAGE_UID` env vars),
+- **PayPlus is live in production (confirmed Sep 2026)**: `src/lib/
+  payments/payplus.ts`, built against PayPlus's real documented API
+  (docs.payplus.co.il, not guessed) — hosted "Payment Page" flow mirroring
+  `cardcom.ts`'s shape: `createPayPlusPayment` (`POST /PaymentPages/
+  generateLink`, needs `PAYPLUS_API_KEY`/`PAYPLUS_SECRET_KEY`/
+  `PAYPLUS_PAYMENT_PAGE_UID`/`PAYPLUS_ENV=production` env vars — all set and
+  confirmed resolving correctly at runtime, unlike the Cardcom vars above),
   `getPayPlusTransactionStatus` (`POST /Transactions/View`, status_code
   `"000"` = approved — always re-verify server-side before trusting a
   webhook/redirect, same principle as Cardcom), and
   `verifyPayPlusWebhookSignature` (HMAC-SHA256 of the raw callback body with
-  the secret key, base64, compared against the `hash` header — PayPlus
-  supports real webhook signature verification, which Cardcom's flow here
-  doesn't use). **Not wired into `/api/checkout` or a webhook route yet** —
-  that's the next step once real credentials arrive, plus resolving whether
-  PayPlus replaces Cardcom outright or is offered alongside it (ask the user
-  if this hasn't been settled by the time you pick this up). The exact
-  incoming IPN callback body field names weren't fully confirmed from docs
-  (the reference pages returned request schemas, not example callback
-  payloads) — confirm those against a real sandbox transaction before
-  finalizing the webhook route, rather than assuming the scaffold's field
-  names are exactly right.
+  the secret key, base64, compared against the `hash` header). `/api/
+  checkout` now tries PayPlus first, falls back to Cardcom if that's ever
+  configured instead, and only uses the dev-mode bypass if neither is —
+  webhook lives at `/api/payments/webhook/payplus` (separate from Cardcom's
+  `/api/payments/webhook`, since the payload shapes differ). **Verified with
+  a real end-to-end test**: real checkout → real order created → real
+  redirect to a live `payments.payplus.co.il` hosted payment page showing
+  the correct amount. Stopped there deliberately — never enter real card
+  details or complete an actual charge; that step is the user's alone to do
+  if they want to confirm the charge itself works. Test orders this created
+  were marked `CANCELLED` in the admin panel afterward, not left sitting as
+  fake "NEW" orders. The exact incoming IPN callback body field names still
+  aren't fully confirmed from docs (the reference pages returned request
+  schemas, not example callback payloads) — the webhook route tries several
+  candidate field paths defensively; confirm the real shape against a real
+  webhook delivery (or PayPlus's dashboard logs) if it turns out not to fire
+  correctly, rather than assuming the current field-name guesses are exactly
+  right.
+- **Checkout validation errors must say *what's* wrong, not just *that*
+  something's wrong**: `checkoutSchema` in `/api/checkout/route.ts` used to
+  return a single generic `"פרטים לא תקינים"` for every validation failure,
+  and the checkout page displays `error` verbatim — so a customer with an
+  invalid phone number (or any other single bad field) saw an unhelpful
+  message with no way to know which field to fix. Every field in the schema
+  now has a specific Hebrew message (e.g. phone requires a custom `.refine()`
+  counting digits, not just `.min()`, since letters can satisfy a raw length
+  check), and the route returns `parsed.error.issues[0].message` as `error`
+  instead of the generic string. When adding a new field to this schema,
+  give it a specific Hebrew message too — don't let it fall back to Zod's
+  default English message or the generic string.

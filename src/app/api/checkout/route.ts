@@ -8,13 +8,20 @@ import { getAddOn } from "@/lib/add-ons";
 
 const checkoutSchema = z.object({
   customer: z.object({
-    name: z.string().trim().min(2),
-    phone: z.string().trim().min(9),
-    email: z.string().trim().email().optional().or(z.literal("")),
+    name: z.string().trim().min(2, "נא להזין שם מלא"),
+    phone: z
+      .string()
+      .trim()
+      .min(1, "נא להזין מספר טלפון")
+      .refine(
+        (val) => (val.match(/\d/g) || []).length >= 9,
+        "מספר הטלפון לא תקין - נדרשות לפחות 9 ספרות"
+      ),
+    email: z.string().trim().email("כתובת האימייל לא תקינה").optional().or(z.literal("")),
   }),
   delivery: z.object({
-    address: z.string().trim().min(3),
-    city: z.string().trim().min(2),
+    address: z.string().trim().min(3, "נא להזין כתובת למשלוח"),
+    city: z.string().trim().min(2, "נא להזין עיר"),
     date: z.string().trim().optional(),
     timeSlot: z.string().trim().optional(),
     cardMessage: z.string().trim().optional(),
@@ -28,7 +35,7 @@ const checkoutSchema = z.object({
         addOnIds: z.array(z.string()).optional(),
       })
     )
-    .min(1),
+    .min(1, "העגלה ריקה"),
 });
 
 export async function POST(request: Request) {
@@ -36,7 +43,14 @@ export async function POST(request: Request) {
   const parsed = checkoutSchema.safeParse(body);
 
   if (!parsed.success) {
-    return NextResponse.json({ error: "פרטים לא תקינים", issues: parsed.error.issues }, { status: 400 });
+    // Surface the first specific validation message rather than a generic
+    // "invalid details" - the checkout page shows `error` verbatim, and
+    // without this a customer has no way to know which field is wrong.
+    const firstIssue = parsed.error.issues[0];
+    return NextResponse.json(
+      { error: firstIssue?.message || "פרטים לא תקינים", issues: parsed.error.issues },
+      { status: 400 }
+    );
   }
 
   const { customer, delivery, items } = parsed.data;
