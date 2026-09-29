@@ -9,7 +9,15 @@ type OrderRow = {
   deliveryDate: Date | null;
   createdAt: Date;
   customer: { name: string; phone: string };
+  items: { nameSnapshot: string; quantity: number }[];
 };
+
+function itemsSummary(items: OrderRow["items"]) {
+  if (items.length === 0) return "—";
+  const [first, ...rest] = items;
+  const firstLabel = `${first.nameSnapshot} × ${first.quantity}`;
+  return rest.length === 0 ? firstLabel : `${firstLabel} ועוד ${rest.length}`;
+}
 
 export function OrdersTable({ orders }: { orders: OrderRow[] }) {
   if (orders.length === 0) {
@@ -23,6 +31,7 @@ export function OrdersTable({ orders }: { orders: OrderRow[] }) {
           <tr>
             <th className="px-4 py-3 font-medium">מס&apos; הזמנה</th>
             <th className="px-4 py-3 font-medium">לקוח</th>
+            <th className="px-4 py-3 font-medium">מוצרים</th>
             <th className="px-4 py-3 font-medium">סטטוס</th>
             <th className="px-4 py-3 font-medium">סכום</th>
             <th className="px-4 py-3 font-medium">תאריך משלוח</th>
@@ -47,6 +56,7 @@ export function OrdersTable({ orders }: { orders: OrderRow[] }) {
                   {order.customer.phone}
                 </div>
               </td>
+              <td className="px-4 py-3 text-ink-muted">{itemsSummary(order.items)}</td>
               <td className="px-4 py-3">
                 <OrderStatusBadge status={order.status} />
               </td>

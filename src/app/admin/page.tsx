@@ -29,7 +29,7 @@ export default async function AdminOrdersPage({
           }
         : {}),
     },
-    include: { customer: true },
+    include: { customer: true, items: true },
     orderBy: { createdAt: "desc" },
   });
 
