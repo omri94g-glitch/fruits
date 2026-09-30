@@ -330,6 +330,20 @@ never an implied certification. If asked for urgency messaging, use a generic
 honest line ("מומלץ להזמין מראש...") — no fake countdowns/stock unless backed
 by a real inventory system.
 
+**`HowItArrives.tsx`'s 5 photo slots are deliberately left empty
+(`<PlaceholderImage>` with no `src`), not an oversight** — its own copy
+explicitly claims "תמונות אמיתיות מהזמנות שיצאו מאיתנו - בדיוק מה שתקבלו"
+(real photos from orders we've fulfilled), so putting any AI-generated/stock
+image there, even one already used elsewhere as a generic "example" photo,
+would contradict that section's specific authenticity claim. This is the one
+section that's the exception to "fill placeholder images in wherever
+missing" — if asked to fill in missing images site-wide, skip this one and
+say why, rather than filling it silently or leaving it out of the
+explanation. `EventsBusinessBand.tsx` (a generic marketing photo, no
+authenticity claim in its copy) is fine to fill with an example photo —
+`public/images/events-boat-tray.png`, a user-supplied AI image of a boat-
+shaped fruit platter, wired in the same way as other real-photo slots.
+
 ## RTL specifics
 - Root `<html dir="rtl" lang="he">`. Mixed Latin/number strings (phone, email,
   order numbers, `@handle`) must be wrapped in `dir="ltr"` — otherwise the bidi
