@@ -206,19 +206,28 @@ the same ink color as a heading, just smaller/regular-weight.
   its own `max-w-[...]` proportionally if the aspect ratio differs. Expect
   more labels site-wide to get swapped to this same image treatment over
   time.
-- **`HowItArrives.tsx` ("SEE THE REAL THING")**: this one image
-  (`public/images/see-real-thing-heading.png`) replaces **two** DOM text
-  elements at once — the eyebrow (`span`, "See The Real Thing") and the
-  paragraph below the heading ("תמונות אמיתיות מהזמנות שיצאו מאיתנו - בדיוק
-  מה שתקבלו.") — because the user's source graphic bakes both pieces of text
-  together into one image. The middle `<h2>` ("ככה זה מגיע אליכם") sits
-  between those two in the DOM/copy but is **not** part of the graphic at
-  all; it stays `sr-only` (not deleted) per the established pattern, and the
-  `<Image>` gets a descriptive `alt` combining both replaced text pieces
-  since there's no separate sr-only element for them. If a future image
-  bakes together multiple adjacent text elements like this, look for which
-  DOM elements it actually replaces content-wise (by reading the image, not
-  by assuming 1 image = 1 element) rather than guessing from position alone.
+- **`HowItArrives.tsx` ("SEE THE REAL THING")**: the heading image is now
+  `public/images/see-real-thing-heading-v2.png`, a PIL crop of the original
+  `see-real-thing-heading.png` that keeps only the "SEE THE REAL THING" text
+  band and the leaf-divider band, with the third band — a baked-in paragraph
+  claiming "תמונות אמיתיות מהזמנות שיצאו מאיתנו - בדיוק מה שתקבלו" (real
+  photos from orders we've fulfilled) — cropped out entirely. That claim was
+  dropped because the 5 photos wired into this section's slots
+  (`arrival-1-tray.png` … `arrival-5-table.png`) are AI-generated (their
+  original filenames, "ChatGPT Image Sep 30, 2026 at ...", gave this away
+  when the user first said they were real photos) and asserting they were
+  genuine order photos would violate the fabrication rule below. The `<Image>`
+  `alt` is now the plain "See The Real Thing", and a new honest DOM paragraph
+  replaces the old baked claim: "כך נראית הזמנה טיפוסית שלנו - מהמגש ועד שהוא
+  מגיע אליכם" (this is what a typical order of ours looks like), which makes
+  no claim that these specific photos came from a real fulfilled order. The
+  middle `<h2>` ("ככה זה מגיע אליכם") stays `sr-only` as before. If this
+  section ever gets real customer/fulfillment photos, this is the one place
+  in the codebase where swapping in genuine photos should also mean restoring
+  language that says so explicitly — don't leave the softened copy once the
+  claim would actually be true. If a future baked-in graphic mixes multiple
+  text elements like the original did, look at what it actually contains (by
+  reading the image) rather than assuming 1 image = 1 element.
 - **`Reviews.tsx` ("לקוחות מספרים" / "מה אומרים עלינו")**:
   `public/images/reviews-heading.png` replaces both the eyebrow (`span`,
   "לקוחות מספרים") and the real `<h2>` ("מה אומרים עלינו") — unlike
@@ -330,19 +339,34 @@ never an implied certification. If asked for urgency messaging, use a generic
 honest line ("מומלץ להזמין מראש...") — no fake countdowns/stock unless backed
 by a real inventory system.
 
-**`HowItArrives.tsx`'s 5 photo slots are deliberately left empty
-(`<PlaceholderImage>` with no `src`), not an oversight** — its own copy
-explicitly claims "תמונות אמיתיות מהזמנות שיצאו מאיתנו - בדיוק מה שתקבלו"
-(real photos from orders we've fulfilled), so putting any AI-generated/stock
-image there, even one already used elsewhere as a generic "example" photo,
-would contradict that section's specific authenticity claim. This is the one
-section that's the exception to "fill placeholder images in wherever
-missing" — if asked to fill in missing images site-wide, skip this one and
-say why, rather than filling it silently or leaving it out of the
-explanation. `EventsBusinessBand.tsx` (a generic marketing photo, no
-authenticity claim in its copy) is fine to fill with an example photo —
-`public/images/events-boat-tray.png`, a user-supplied AI image of a boat-
-shaped fruit platter, wired in the same way as other real-photo slots.
+**`HowItArrives.tsx`'s 5 photo slots are now filled with AI-generated images
+(`arrival-1-tray.png` … `arrival-5-table.png`), and the section's copy was
+rewritten, not the images swapped out, to keep this rule intact.** The
+section originally shipped with these slots deliberately empty because its
+baked-in heading graphic claimed "תמונות אמיתיות מהזמנות שיצאו מאיתנו - בדיוק
+מה שתקבלו" (real photos from orders we've fulfilled) — any photo placed there
+would have had to actually be that. When the user supplied 5 images for this
+exact section and initially said they were real ("זה תמונות אמיתיות"), the
+files' own names ("ChatGPT Image Sep 30, 2026 at ...") contradicted that —
+the giveaway was the filename pattern, not a guess — and rather than silently
+trusting the verbal claim over that evidence, the discrepancy was raised
+directly with the user, who confirmed by asking to change the copy instead
+("תשנה"). The fix: keep the images (they're representative fruit-tray
+content, nothing wrong with using them), but crop the "real photos" claim out
+of the heading graphic (see `see-real-thing-heading-v2.png` above) and
+replace it with copy that only claims these show what a *typical* order looks
+like, not that they came from a specific real fulfilled order. **The general
+principle, not just this one instance**: when a user's stated intent
+("these are real") conflicts with concrete evidence in front of you (a
+filename, metadata, a timestamp), surface the conflict before proceeding —
+don't silently comply with either the claim or your own suspicion. If asked
+to fill in missing images site-wide, treat any section with a specific
+authenticity claim in its copy the same way: either the content must actually
+be real, or the copy must stop claiming it is — never fabricate the claim to
+fit generic filler content. `EventsBusinessBand.tsx` (a generic marketing
+photo, no authenticity claim in its copy) has no such constraint — it's
+filled with an example AI photo, `public/images/events-boat-tray.png`, a
+boat-shaped fruit platter, same as any other placeholder slot.
 
 ## RTL specifics
 - Root `<html dir="rtl" lang="he">`. Mixed Latin/number strings (phone, email,
