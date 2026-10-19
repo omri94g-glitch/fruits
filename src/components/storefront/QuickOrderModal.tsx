@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X, Minus, Plus } from "lucide-react";
 import { useQuickOrder } from "@/lib/quick-order-context";
 import { useCart } from "@/lib/cart-context";
+import { useDialogA11y } from "@/lib/use-dialog-a11y";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { ADD_ONS } from "@/lib/add-ons";
 
@@ -17,6 +18,8 @@ export function QuickOrderModal() {
   const [localCity, setLocalCity] = useState(delivery.deliveryCity);
   const [localDate, setLocalDate] = useState(delivery.deliveryDate);
   const [localMessage, setLocalMessage] = useState(delivery.cardMessage);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(Boolean(product), dialogRef, close);
 
   useEffect(() => {
     if (product) {
@@ -70,9 +73,11 @@ export function QuickOrderModal() {
         className="fixed inset-0 z-[60] bg-ink/40"
       />
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label={`הזמנה מהירה - ${product.name}`}
+        tabIndex={-1}
         className="fixed inset-x-0 bottom-0 sm:inset-0 z-[60] sm:flex sm:items-center sm:justify-center"
       >
         <div className="bg-cream rounded-t-3xl sm:rounded-3xl w-full sm:max-w-lg max-h-[90vh] overflow-y-auto shadow-xl">
@@ -100,6 +105,7 @@ export function QuickOrderModal() {
                       key={v.id}
                       type="button"
                       onClick={() => setVariantId(v.id)}
+                      aria-pressed={v.id === selectedVariant.id}
                       className={`rounded-full px-4 py-2 text-sm border transition-colors text-right ${
                         v.id === selectedVariant.id
                           ? "bg-green-700 text-cream border-green-700"
@@ -127,7 +133,7 @@ export function QuickOrderModal() {
                 >
                   <Minus size={16} />
                 </button>
-                <span className="w-5 text-center">{quantity}</span>
+                <span className="w-5 text-center" aria-live="polite">{quantity}</span>
                 <button
                   type="button"
                   aria-label="הוסף כמות"

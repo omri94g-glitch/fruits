@@ -94,10 +94,10 @@ export default function CheckoutPage() {
         <h1 className="font-serif text-2xl text-ink">פרטי משלוח ותשלום</h1>
 
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field label="שם מלא" value={form.name} onChange={update("name")} required />
-          <Field label="טלפון" value={form.phone} onChange={update("phone")} required dir="ltr" />
+          <Field label="שם מלא" value={form.name} onChange={update("name")} required autoComplete="name" />
+          <Field label="טלפון" type="tel" value={form.phone} onChange={update("phone")} required dir="ltr" autoComplete="tel" />
         </div>
-        <Field label="אימייל (לא חובה)" type="email" value={form.email} onChange={update("email")} dir="ltr" />
+        <Field label="אימייל (לא חובה)" type="email" value={form.email} onChange={update("email")} dir="ltr" autoComplete="email" />
 
         <div className="grid sm:grid-cols-2 gap-4">
           <Field
@@ -105,8 +105,9 @@ export default function CheckoutPage() {
             value={delivery.deliveryCity}
             onChange={(e) => setDelivery({ deliveryCity: e.target.value })}
             required
+            autoComplete="address-level2"
           />
-          <Field label="כתובת למשלוח" value={form.address} onChange={update("address")} required />
+          <Field label="כתובת למשלוח" value={form.address} onChange={update("address")} required autoComplete="street-address" />
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4">
@@ -125,7 +126,11 @@ export default function CheckoutPage() {
           onChange={(e) => setDelivery({ cardMessage: e.target.value })}
         />
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && (
+          <p role="alert" className="text-sm text-red-600">
+            {error}
+          </p>
+        )}
 
         <button
           type="submit"
@@ -171,6 +176,7 @@ function Field({
   required = false,
   dir,
   placeholder,
+  autoComplete,
 }: {
   label: string;
   value: string;
@@ -179,6 +185,7 @@ function Field({
   required?: boolean;
   dir?: "ltr" | "rtl";
   placeholder?: string;
+  autoComplete?: string;
 }) {
   return (
     <label className="flex flex-col gap-1.5 text-sm">
@@ -190,6 +197,7 @@ function Field({
         required={required}
         dir={dir}
         placeholder={placeholder}
+        autoComplete={autoComplete}
         className="rounded-xl border border-line px-4 py-2.5 outline-none focus:ring-1 focus:ring-green-700 bg-cream"
       />
     </label>

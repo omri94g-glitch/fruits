@@ -15,6 +15,8 @@ export function Footer() {
             <input
               type="email"
               required
+              autoComplete="email"
+              aria-label="כתובת מייל להרשמה לניוזלטר"
               placeholder="הכניסו כתובת מייל"
               className="flex-1 rounded-full bg-cream/10 px-4 py-2 text-sm placeholder:text-cream/50 outline-none focus:ring-1 focus:ring-gold"
             />
@@ -55,7 +57,7 @@ export function Footer() {
           </div>
         </div>
 
-        <nav className="flex flex-col items-center gap-2 text-cream/70">
+        <nav aria-label="תפריט תחתון" className="flex flex-col items-center gap-2 text-cream/70">
           {navLinks.map((link) => (
             <Link key={link.href} href={link.href} className="hover:text-gold transition-colors">
               {link.label}
@@ -76,8 +78,11 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-cream/10 py-4 text-center text-xs text-cream/50">
-        © {new Date().getFullYear()} כל הזכויות שמורות ל-{siteConfig.name}
+      <div className="border-t border-cream/10 py-4 flex flex-col items-center gap-2 text-xs text-cream/50">
+        <Link href="/accessibility" className="underline underline-offset-2 hover:text-gold transition-colors">
+          הצהרת נגישות
+        </Link>
+        <span>© {new Date().getFullYear()} כל הזכויות שמורות ל-{siteConfig.name}</span>
       </div>
     </footer>
   );

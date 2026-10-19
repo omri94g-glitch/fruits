@@ -82,6 +82,7 @@ export function AddToCartForm({
                 key={v.id}
                 type="button"
                 onClick={() => setVariantId(v.id)}
+                aria-pressed={v.id === variantId}
                 className={`rounded-full px-4 py-2 text-sm border transition-colors text-right ${
                   v.id === variantId
                     ? "bg-green-700 text-cream border-green-700"
@@ -107,7 +108,7 @@ export function AddToCartForm({
           >
             <Minus size={16} />
           </button>
-          <span className="w-5 text-center">{quantity}</span>
+          <span className="w-5 text-center" aria-live="polite">{quantity}</span>
           <button
             type="button"
             aria-label="הוסף כמות"

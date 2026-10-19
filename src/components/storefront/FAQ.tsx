@@ -38,7 +38,7 @@ export function FAQ() {
           >
             <summary className="flex items-center justify-between gap-4 cursor-pointer text-sm font-medium text-ink list-none">
               {item.q}
-              <span className="text-ink-muted group-open:rotate-45 transition-transform text-lg leading-none">
+              <span aria-hidden="true" className="text-ink-muted group-open:rotate-45 transition-transform text-lg leading-none">
                 +
               </span>
             </summary>

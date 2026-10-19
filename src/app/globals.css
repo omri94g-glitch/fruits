@@ -39,3 +39,63 @@ body {
 .font-serif {
   letter-spacing: 0.012em;
 }
+
+/* Keyboard focus ring for links/buttons. In @layer base so utilities like
+   `outline-none` on inputs (which draw their own ring) still win. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-green-700);
+    outline-offset: 2px;
+  }
+  .bg-green-900 :focus-visible {
+    outline-color: var(--color-gold-soft);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Accessibility toolbar modes - toggled on <html> by AccessibilityMenu. */
+html.a11y-contrast {
+  --color-cream: #ffffff;
+  --color-cream-alt: #ffffff;
+  --color-hero: #ffffff;
+  --color-ink: #000000;
+  --color-ink-muted: #000000;
+  --color-green-900: #000000;
+  --color-green-700: #000000;
+  --color-green-600: #262626;
+  --color-gold: #7a5600;
+  --color-line: #000000;
+}
+
+html.a11y-grayscale {
+  filter: grayscale(1);
+}
+
+html.a11y-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+}
+
+html.a11y-readable,
+html.a11y-readable * {
+  font-family: Arial, Helvetica, sans-serif !important;
+  letter-spacing: normal !important;
+}
+
+html.a11y-no-motion *,
+html.a11y-no-motion *::before,
+html.a11y-no-motion *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}

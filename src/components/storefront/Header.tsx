@@ -84,11 +84,12 @@ export function Header() {
               {siteConfig.name}
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-7 text-sm">
+            <nav aria-label="תפריט ראשי" className="hidden lg:flex items-center gap-7 text-sm">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={isActive(link.href) ? "page" : undefined}
                   className="relative text-ink-muted hover:text-green-700 transition-colors pb-1 data-[active=true]:text-green-700 data-[active=true]:font-medium data-[active=true]:after:absolute data-[active=true]:after:right-0 data-[active=true]:after:left-0 data-[active=true]:after:-bottom-0.5 data-[active=true]:after:h-0.5 data-[active=true]:after:bg-green-700"
                   data-active={isActive(link.href)}
                 >
@@ -103,7 +104,7 @@ export function Header() {
               type="button"
               onClick={openCart}
               className="flex items-center gap-1.5 text-ink hover:text-green-700 transition-colors"
-              aria-label="פתיחת עגלת קניות"
+              aria-label={`פתיחת עגלת קניות, ${itemCount} פריטים`}
             >
               <ShoppingBag size={19} />
               <span className="text-sm">{itemCount}</span>
@@ -112,6 +113,8 @@ export function Header() {
               type="button"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={mobileOpen ? "סגירת תפריט" : "פתיחת תפריט"}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-nav"
               className="lg:hidden flex items-center text-ink"
             >
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
@@ -120,11 +123,12 @@ export function Header() {
         </div>
 
         {mobileOpen && (
-          <nav className="lg:hidden border-t border-line flex flex-col items-center gap-1 py-4">
+          <nav id="mobile-nav" aria-label="תפריט ראשי" className="lg:hidden border-t border-line flex flex-col items-center gap-1 py-4">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={isActive(link.href) ? "page" : undefined}
                 onClick={() => setMobileOpen(false)}
                 className="w-full text-center py-2 text-sm text-ink-muted hover:text-green-700 data-[active=true]:text-green-700 data-[active=true]:font-medium transition-colors"
                 data-active={isActive(link.href)}

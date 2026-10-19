@@ -61,7 +61,7 @@ export function CartItemsList() {
                   >
                     <Minus size={14} />
                   </button>
-                  <span className="w-4 text-center text-sm">{item.quantity}</span>
+                  <span className="w-4 text-center text-sm" aria-live="polite">{item.quantity}</span>
                   <button
                     type="button"
                     aria-label="הוסף כמות"

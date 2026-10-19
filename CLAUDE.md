@@ -316,6 +316,55 @@ the same ink color as a heading, just smaller/regular-weight.
 - Focus states: `focus:ring-1 focus:ring-green-700` on all inputs — never
   remove outline without a replacement.
 - Interactive targets stay ≥40px tall on mobile (buttons, filter chips).
+- **Dialogs** (`CartDrawer`, `QuickOrderModal`) use `src/lib/use-dialog-a11y.ts`:
+  Escape closes, Tab is trapped inside, body scroll locks, and focus returns to
+  the opener. `CartDrawer` is always mounted (slides off-screen), so it also
+  carries `inert={!isOpen}` — without it the closed drawer's links/inputs stay
+  tabbable and visible to screen readers. Any new custom dialog should reuse
+  the hook, not re-implement this.
+- **Skip link + landmarks**: `(storefront)/layout.tsx` renders a
+  "דלגו לתוכן הראשי" skip link (visible only on focus) targeting
+  `<main id="main-content" tabIndex={-1}>`. The two header navs and the footer
+  nav each have a distinct `aria-label`; active nav links carry
+  `aria-current="page"`; the mobile menu toggle has `aria-expanded` /
+  `aria-controls`.
+- **State on toggle buttons**: size/variant chips use `aria-pressed`; quantity
+  counters are `aria-live="polite"`; checkout errors are `role="alert"`;
+  checkout fields have `autoComplete` (WCAG 1.3.5).
+- **Focus ring**: a global `:focus-visible` outline lives in `@layer base` in
+  `globals.css` (green-700, gold-soft on `.bg-green-900` surfaces). It has to
+  stay in `@layer base` — outside a layer it would override the `outline-none`
+  + `focus:ring-1` already used on inputs. `prefers-reduced-motion` is honored
+  globally.
+- **Accessibility toolbar** (`AccessibilityMenu.tsx`, floating button
+  bottom-right, opposite the WhatsApp button): text size (100/115/130/150% by
+  scaling the root `font-size`, which works because Tailwind sizing is
+  rem-based), high contrast, grayscale, underline links, readable font, stop
+  animations. It toggles `a11y-*` classes on `<html>` (styles at the bottom of
+  `globals.css`) and persists to `localStorage` key `rfruits-a11y`. High
+  contrast works by remapping the `--color-*` tokens on `html.a11y-contrast`,
+  so new components stay covered as long as they use tokens rather than raw
+  hex. Baked-in PNG text (hero banner, heading images) can't be restyled by it.
+- **Accessibility statement** at `/accessibility` (`(storefront)/accessibility/
+  page.tsx`), linked from the footer and the toolbar. It deliberately says the
+  site is *designed to aim for* ת"י 5568 / WCAG 2.0 AA and that some parts may
+  not be fully accessible — it does **not** claim certified compliance, and it
+  only lists features that actually exist in the code. Keep it that way: when
+  adding or removing an accessibility feature, update that list, and don't add
+  a compliance claim, an audit claim, or an accessibility coordinator's name/
+  phone unless the user supplies real ones (Israeli regulations expect a named
+  coordinator on the statement; we have none to put there). Its contact
+  details come from `siteConfig`, same as the footer.
+- **Known gaps, not fixed (design decisions for the user)**: `text-gold`
+  (`#B0873F`) on cream is ~3.1:1, below the 4.5:1 AA threshold for small text
+  — it's used for the 12px eyebrow labels (`products/page.tsx`,
+  `products/[slug]/page.tsx`, `EventsBusinessBand.tsx`). Fixing it means
+  adding a darker text-only gold (e.g. `#8A6A2E`, ~4.8:1), which is a new
+  token, so it wasn't done unasked. `siteConfig` phone/WhatsApp are still
+  placeholders (`050-0000000`) and `navLinks` points at `/events`, `/about`,
+  `/contact`, which have no pages yet. No formal audit (axe/Lighthouse/screen
+  reader pass) has been run — only the keyboard/dialog behavior above was
+  verified by hand in a browser.
 
 ## Original vs. reference — don't re-copy these back
 The reference screenshot is a **principles source**, not a layout to mirror.

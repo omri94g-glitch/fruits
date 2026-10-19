@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import { useDialogA11y } from "@/lib/use-dialog-a11y";
 import { CartItemsList } from "./CartItemsList";
 import { trackEvent } from "@/lib/analytics";
 
 export function CartDrawer() {
   const { items, subtotal, delivery, setDelivery, isOpen, close } = useCart();
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogA11y(isOpen, dialogRef, close);
 
   useEffect(() => {
     if (isOpen) trackEvent("view_cart", { value: subtotal, items: items.length });
@@ -26,9 +29,12 @@ export function CartDrawer() {
       />
 
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label="עגלת קניות"
+        tabIndex={-1}
+        inert={!isOpen}
         className={`fixed inset-y-0 left-0 z-50 w-full max-w-sm bg-cream shadow-xl transition-transform duration-300 flex flex-col ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
