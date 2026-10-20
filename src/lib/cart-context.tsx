@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { getDeliveryQuote } from "@/lib/delivery";
+import { computeDiscount, type AppliedCoupon } from "@/lib/coupon-discount";
 
 export type CartItemAddOn = { id: string; label: string; price: number };
 
@@ -39,6 +40,10 @@ type CartContextValue = {
   subtotal: number;
   // null until a city from the delivery list is chosen
   deliveryFee: number | null;
+  coupon: AppliedCoupon | null;
+  applyCoupon: (coupon: AppliedCoupon) => void;
+  removeCoupon: () => void;
+  discount: number;
   total: number;
 
   delivery: DeliveryInfo;
@@ -52,6 +57,7 @@ type CartContextValue = {
 const CartContext = createContext<CartContextValue | null>(null);
 const STORAGE_KEY = "rfruits-cart";
 const DELIVERY_STORAGE_KEY = "rfruits-cart-delivery";
+const COUPON_STORAGE_KEY = "rfruits-cart-coupon";
 
 const emptyDelivery: DeliveryInfo = { deliveryDate: "", deliveryCity: "", cardMessage: "" };
 
@@ -65,6 +71,7 @@ function addOnsKey(addOns: CartItemAddOn[]) {
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [delivery, setDeliveryState] = useState<DeliveryInfo>(emptyDelivery);
+  const [coupon, setCoupon] = useState<AppliedCoupon | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
@@ -90,6 +97,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
         // ignore corrupted delivery data
       }
     }
+    const rawCoupon = localStorage.getItem(COUPON_STORAGE_KEY);
+    if (rawCoupon) {
+      try {
+        setCoupon(JSON.parse(rawCoupon));
+      } catch {
+        // ignore corrupted coupon data
+      }
+    }
     setHydrated(true);
   }, []);
 
@@ -100,6 +115,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (hydrated) localStorage.setItem(DELIVERY_STORAGE_KEY, JSON.stringify(delivery));
   }, [delivery, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (coupon) localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(coupon));
+    else localStorage.removeItem(COUPON_STORAGE_KEY);
+  }, [coupon, hydrated]);
 
   const addItem: CartContextValue["addItem"] = (item, quantity = 1) => {
     const addOns = item.addOns ?? [];
@@ -149,6 +170,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const clear = () => {
     setItems([]);
     setDeliveryState(emptyDelivery);
+    setCoupon(null);
   };
 
   const setDelivery: CartContextValue["setDelivery"] = (patch) =>
@@ -168,7 +190,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [items]
   );
   const deliveryFee = getDeliveryQuote(delivery.deliveryCity)?.fee ?? null;
-  const total = subtotal + (deliveryFee ?? 0);
+  const discount = coupon ? computeDiscount(coupon, subtotal) : 0;
+  const total = subtotal - discount + (deliveryFee ?? 0);
 
   return (
     <CartContext.Provider
@@ -181,6 +204,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
         itemCount,
         subtotal,
         deliveryFee,
+        coupon,
+        applyCoupon: setCoupon,
+        removeCoupon: () => setCoupon(null),
+        discount,
         total,
         delivery,
         setDelivery,

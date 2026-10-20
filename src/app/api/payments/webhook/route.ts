@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { recordCouponUse } from "@/lib/coupons";
 import { getCardcomPaymentResult } from "@/lib/payments/cardcom";
 
 // Cardcom posts here after a payment attempt, but the payload itself is not
@@ -29,6 +30,7 @@ export async function POST(request: Request) {
     result.ResponseCode === 0 && result.TranzactionInfo?.ResponseCode === 0;
 
   if (paid) {
+    const firstTimePaid = order.paymentStatus !== "PAID";
     await db.order.update({
       where: { id: order.id },
       data: { paymentStatus: "PAID", status: "CONFIRMED" },
@@ -36,6 +38,7 @@ export async function POST(request: Request) {
     await db.orderStatusHistory.create({
       data: { orderId: order.id, status: "CONFIRMED", changedBy: "cardcom-webhook" },
     });
+    if (firstTimePaid) await recordCouponUse(order.couponCode);
   } else {
     await db.order.update({
       where: { id: order.id },

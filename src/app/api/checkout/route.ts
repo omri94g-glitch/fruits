@@ -7,6 +7,7 @@ import { createPayPlusPayment, isPayPlusConfigured } from "@/lib/payments/payplu
 import { getAddOn } from "@/lib/add-ons";
 import { getDeliveryQuote, UNSERVED_CITY_MESSAGE } from "@/lib/delivery";
 import { normalizePhone } from "@/lib/phone";
+import { findUsableCoupon } from "@/lib/coupons";
 
 const checkoutSchema = z.object({
   customer: z.object({
@@ -29,6 +30,7 @@ const checkoutSchema = z.object({
     timeSlot: z.string().trim().optional(),
     cardMessage: z.string().trim().optional(),
   }),
+  couponCode: z.string().trim().optional(),
   items: z
     .array(
       z.object({
@@ -56,7 +58,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const { customer, delivery, items } = parsed.data;
+  const { customer, delivery, items, couponCode } = parsed.data;
 
   const deliveryQuote = getDeliveryQuote(delivery.city);
   if (!deliveryQuote) {
@@ -94,7 +96,21 @@ export async function POST(request: Request) {
     (sum, item) => sum + Number(item.unitPrice) * item.quantity,
     0
   );
-  const totalAmount = itemsTotal + deliveryQuote.fee;
+
+  // Recomputed here from the database prices - the discount the browser showed
+  // is only a preview. The coupon never discounts the delivery fee.
+  let discountAmount = 0;
+  let appliedCouponCode: string | null = null;
+  if (couponCode) {
+    const coupon = await findUsableCoupon(couponCode, itemsTotal);
+    if (!coupon.ok) {
+      return NextResponse.json({ error: coupon.error }, { status: 400 });
+    }
+    discountAmount = coupon.discount;
+    appliedCouponCode = coupon.coupon.code;
+  }
+
+  const totalAmount = itemsTotal - discountAmount + deliveryQuote.fee;
 
   // Match on the normalized phone, or the raw string for customers saved before
   // normalization existed, so a returning customer isn't duplicated.
@@ -133,6 +149,8 @@ export async function POST(request: Request) {
       deliveryTimeSlot: delivery.timeSlot || null,
       cardMessage: delivery.cardMessage || null,
       deliveryFee: deliveryQuote.fee,
+      couponCode: appliedCouponCode,
+      discountAmount,
       totalAmount,
       items: { create: orderItems },
       statusHistory: { create: { status: "NEW", changedBy: "customer" } },

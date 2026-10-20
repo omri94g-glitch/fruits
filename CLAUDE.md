@@ -450,6 +450,36 @@ boat-shaped fruit platter, same as any other placeholder slot.
   because they really weren't charged one (migration `20261020180000_add_
   delivery_fee`, additive and safe to apply before the new code is live).
 
+## Coupons
+- **Model & seed**: `Coupon` (percentOff *or* amountOff, optional expiry /
+  maxUses / minOrder, `usedCount`). The owner's first code, `rfruitsfriends`
+  (15%), is inserted by the migration itself (`ON CONFLICT DO NOTHING`), so it
+  reaches production through the normal deploy without touching the prod DB by
+  hand. Further codes are created in the admin "קופונים" page (create + on/off;
+  to change a code, disable it and make a new one). Codes are stored lowercase
+  and matched ignoring case and spaces.
+- **Server is the authority**, same rule as delivery fees: `/api/coupons/
+  validate` is only a preview for the cart; `/api/checkout` re-runs
+  `findUsableCoupon()` against the database's own item prices and rejects a bad,
+  expired, used-up or below-minimum code (no order is created). The order stores
+  a snapshot — `couponCode` + `discountAmount` — and `totalAmount = items −
+  discount + deliveryFee`, which is what PayPlus charges.
+- **Discount rules (the owner accepted these defaults)**: applies to the items
+  only, never the delivery fee; a percentage is rounded to the nearest whole
+  shekel (all prices on the site are whole shekels); never exceeds the items
+  total. The math is `computeDiscount()` in `lib/coupon-discount.ts`, shared by
+  the browser (live totals; `useCart()` exposes `coupon`/`discount`/`total`)
+  and the server.
+- **`usedCount` only goes up when payment is confirmed** (`recordCouponUse` in
+  both webhooks, guarded so a repeated callback can't count twice) — an
+  abandoned checkout must not burn a limited coupon. That makes limits depend
+  on the PayPlus webhook working (see Payments; its payload shape is still
+  unconfirmed), and a limit can be overshot slightly by simultaneous unpaid
+  checkouts. Not tested end to end: the real PayPlus webhook can't be run
+  locally.
+- Known gaps: no rate limit on the validate endpoint, so a short guessable
+  code could be brute-forced; no per-customer "once only" limit (not asked for).
+
 ## Customers database (admin "לקוחות")
 - **Every checkout already stored a `Customer`** (found/created by phone), even
   for people who never paid. The admin page `/admin/customers` therefore lists

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { recordCouponUse } from "@/lib/coupons";
 import { getPayPlusTransactionStatus, verifyPayPlusWebhookSignature } from "@/lib/payments/payplus";
 
 // PayPlus posts here after a payment attempt, but neither the payload nor its
@@ -45,6 +46,8 @@ export async function POST(request: Request) {
   }
 
   if (result.approved) {
+    // PayPlus can deliver the same callback more than once.
+    const firstTimePaid = order.paymentStatus !== "PAID";
     await db.order.update({
       where: { id: order.id },
       data: { paymentStatus: "PAID", status: "CONFIRMED" },
@@ -52,6 +55,7 @@ export async function POST(request: Request) {
     await db.orderStatusHistory.create({
       data: { orderId: order.id, status: "CONFIRMED", changedBy: "payplus-webhook" },
     });
+    if (firstTimePaid) await recordCouponUse(order.couponCode);
   } else {
     await db.order.update({
       where: { id: order.id },

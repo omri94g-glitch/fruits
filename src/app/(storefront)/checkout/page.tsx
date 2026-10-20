@@ -10,7 +10,7 @@ import { OrderTotals } from "@/components/storefront/OrderTotals";
 import { siteConfig } from "@/lib/site-config";
 
 export default function CheckoutPage() {
-  const { items, subtotal, total, clear, delivery, setDelivery } = useCart();
+  const { items, total, coupon, clear, delivery, setDelivery } = useCart();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +42,7 @@ export default function CheckoutPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          couponCode: coupon?.code,
           customer: { name: form.name, phone: form.phone, email: form.email, marketingConsent },
           delivery: {
             address: form.address,

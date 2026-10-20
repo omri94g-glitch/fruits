@@ -124,7 +124,12 @@ model Order {
   // totalAmount includes deliveryFee. Orders placed before delivery fees
   // existed keep 0 - they really weren't charged one.
   deliveryFee Decimal @default(0) @db.Decimal(10, 2)
-  totalAmount Decimal @db.Decimal(10, 2)
+  // Coupon applied at checkout: the code is a snapshot (the Coupon row may be
+  // edited/disabled later) and discountAmount is what was actually taken off
+  // the items total. totalAmount = items - discountAmount + deliveryFee.
+  couponCode     String?
+  discountAmount Decimal  @default(0) @db.Decimal(10, 2)
+  totalAmount    Decimal  @db.Decimal(10, 2)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -134,6 +139,21 @@ model Order {
 
   @@index([status])
   @@index([customerId])
+}
+
+// Discount code. Either percentOff or amountOff is set. usedCount only goes up
+// when a payment is confirmed, so abandoned checkouts don't burn a use.
+model Coupon {
+  id         String    @id @default(cuid())
+  code       String    @unique // stored lowercase, matched case-insensitively
+  percentOff Int?
+  amountOff  Decimal?  @db.Decimal(10, 2)
+  active     Boolean   @default(true)
+  expiresAt  DateTime?
+  maxUses    Int?
+  minOrder   Decimal?  @db.Decimal(10, 2)
+  usedCount  Int       @default(0)
+  createdAt  DateTime  @default(now())
 }
 
 model OrderItem {

@@ -87,6 +87,14 @@ export default async function AdminOrderDetailPage({
               </div>
             );
           })}
+          {order.couponCode && (
+            <div className="flex items-center justify-between px-4 py-3 text-sm border-b border-line">
+              <span className="text-ink-muted">
+                קופון <span dir="ltr">{order.couponCode}</span>
+              </span>
+              <span>−{Number(order.discountAmount)} ₪</span>
+            </div>
+          )}
           <div className="flex items-center justify-between px-4 py-3 text-sm border-b border-line">
             <span className="text-ink-muted">דמי משלוח</span>
             <span>{Number(order.deliveryFee)} ₪</span>

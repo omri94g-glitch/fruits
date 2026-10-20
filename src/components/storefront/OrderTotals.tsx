@@ -1,16 +1,24 @@
 "use client";
 
 import { useCart } from "@/lib/cart-context";
+import { CouponField } from "./CouponField";
 
 export function OrderTotals() {
-  const { subtotal, deliveryFee, total } = useCart();
+  const { subtotal, discount, deliveryFee, total } = useCart();
 
   return (
     <div className="flex flex-col gap-2 text-sm">
+      <CouponField />
       <div className="flex items-center justify-between">
         <span className="text-ink-muted">מוצרים</span>
         <span className="text-ink">{subtotal} ₪</span>
       </div>
+      {discount > 0 && (
+        <div className="flex items-center justify-between">
+          <span className="text-ink-muted">הנחה</span>
+          <span className="text-ink">−{discount} ₪</span>
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <span className="text-ink-muted">משלוח</span>
         <span className="text-ink">
