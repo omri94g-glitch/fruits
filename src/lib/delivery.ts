@@ -2,7 +2,7 @@
 // recomputes the fee from the city here - never trust a fee sent by the client.
 
 export type DeliveryZone = {
-  id: "netanya" | "center";
+  id: "netanya" | "center" | "rishon";
   label: string;
   fee: number;
   cities: string[];
@@ -26,6 +26,7 @@ export const DELIVERY_ZONES: DeliveryZone[] = [
       "אודים",
       "גאולים",
       "בית יהושע",
+      "חדרה",
     ],
   },
   {
@@ -57,6 +58,12 @@ export const DELIVERY_ZONES: DeliveryZone[] = [
       "מודיעין-מכבים-רעות",
     ],
   },
+  {
+    id: "rishon",
+    label: "ראשון לציון והסביבה",
+    fee: 60,
+    cities: ["ראשון לציון", "חולון", "בת ים", "רחובות", "נס ציונה"],
+  },
 ];
 
 // Tolerates spacing/dash variants ("הוד-השרון", "תל אביב יפו") so a value saved
@@ -85,4 +92,4 @@ export function getDeliveryQuote(city: string | null | undefined): DeliveryQuote
 }
 
 export const UNSERVED_CITY_MESSAGE =
-  "כרגע אנחנו מבצעים משלוחים לנתניה והסביבה ולאזור המרכז. לעיר שלכם צרו קשר בוואטסאפ ונבדוק אם אפשר להגיע.";
+  "העיר שלכם עדיין לא ברשימת אזורי המשלוח שלנו. צרו קשר בוואטסאפ ונבדוק אם אפשר להגיע.";

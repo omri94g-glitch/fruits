@@ -418,9 +418,11 @@ filled with an example AI photo, `public/images/events-boat-tray.png`, a
 boat-shaped fruit platter, same as any other placeholder slot.
 
 ## Delivery fees & zones
-- **Source of truth is `src/lib/delivery.ts`**: two zones with the user's own
-  prices (Oct 2026) — "נתניה והסביבה" ₪40 and "אזור המרכז (ממודיעין ועד
-  השרון)" ₪60 — each with an explicit city list. Before this, delivery fees
+- **Source of truth is `src/lib/delivery.ts`**: three zones with the user's own
+  prices (Oct 2026) — "נתניה והסביבה" ₪40 (includes Hadera, at the user's
+  request), "אזור המרכז (ממודיעין ועד השרון)" ₪60, and "ראשון לציון והסביבה"
+  ₪60 (Rishon, Holon, Bat Yam, Rehovot, Nes Ziona) — each with an explicit
+  city list. Before this, delivery fees
   didn't exist at all: `Order.totalAmount` was items only, so the first real
   customer (Oct 2026) paid nothing for delivery.
 - **The server is the authority.** `/api/checkout` recomputes the fee from the
@@ -438,8 +440,9 @@ boat-shaped fruit platter, same as any other placeholder slot.
 - **The city lists were drafted by Claude from geography, the prices were the
   user's.** The list decides who is promised delivery, so treat it as the
   user's to edit: adding/removing a city is a one-line change in
-  `DELIVERY_ZONES`. Deliberately *not* included (ask before adding): Rishon,
-  Holon, Bat Yam, Rehovot, Nes Ziona, Hadera and anywhere further out.
+  `DELIVERY_ZONES`. The Rishon-area cities and Hadera were first left out on
+  purpose and added only when the user asked. Anything not in a list is
+  rejected at checkout, so ask before adding more.
 - **No "delivery to the whole country" claims anywhere** — the footer,
   tagline, meta description and FAQ were changed from "לכל הארץ" to the real
   coverage. Keep new copy consistent with the zones (see the fabrication rule).
