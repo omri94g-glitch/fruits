@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useCart } from "@/lib/cart-context";
 import { CartItemsList } from "@/components/storefront/CartItemsList";
+import { CitySelect } from "@/components/storefront/CitySelect";
+import { OrderTotals } from "@/components/storefront/OrderTotals";
 
 export default function CartPage() {
-  const { items, subtotal, delivery, setDelivery } = useCart();
+  const { items, delivery, setDelivery } = useCart();
 
   if (items.length === 0) {
     return (
@@ -28,15 +30,10 @@ export default function CartPage() {
       <CartItemsList />
 
       <div className="flex flex-col gap-4 mt-6">
-        <label className="flex flex-col gap-1.5 text-sm">
-          <span className="text-ink-muted">עיר משלוח</span>
-          <input
-            type="text"
-            value={delivery.deliveryCity}
-            onChange={(e) => setDelivery({ deliveryCity: e.target.value })}
-            className="rounded-xl border border-line px-4 py-2.5 outline-none focus:ring-1 focus:ring-green-700 bg-cream"
-          />
-        </label>
+        <CitySelect
+          value={delivery.deliveryCity}
+          onChange={(city) => setDelivery({ deliveryCity: city })}
+        />
         <label className="flex flex-col gap-1.5 text-sm">
           <span className="text-ink-muted">תאריך משלוח מבוקש</span>
           <input
@@ -57,9 +54,8 @@ export default function CartPage() {
         </label>
       </div>
 
-      <div className="flex items-center justify-between mt-8 border-t border-line pt-6">
-        <span className="text-ink-muted">סה&quot;כ</span>
-        <span className="text-xl font-medium">{subtotal} ₪</span>
+      <div className="mt-8 border-t border-line pt-6">
+        <OrderTotals />
       </div>
 
       <Link

@@ -8,6 +8,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { getDeliveryQuote } from "@/lib/delivery";
 
 export type CartItemAddOn = { id: string; label: string; price: number };
 
@@ -36,6 +37,9 @@ type CartContextValue = {
   clear: () => void;
   itemCount: number;
   subtotal: number;
+  // null until a city from the delivery list is chosen
+  deliveryFee: number | null;
+  total: number;
 
   delivery: DeliveryInfo;
   setDelivery: (patch: Partial<DeliveryInfo>) => void;
@@ -163,6 +167,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       ),
     [items]
   );
+  const deliveryFee = getDeliveryQuote(delivery.deliveryCity)?.fee ?? null;
+  const total = subtotal + (deliveryFee ?? 0);
 
   return (
     <CartContext.Provider
@@ -174,6 +180,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         clear,
         itemCount,
         subtotal,
+        deliveryFee,
+        total,
         delivery,
         setDelivery,
         isOpen,

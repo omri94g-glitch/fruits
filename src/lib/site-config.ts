@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Rfruits",
-  tagline: "משלוחים טריים לכל הארץ",
+  tagline: "משלוחים טריים בנתניה ובמרכז",
   phone: "050-0000000",
   phoneHref: "tel:0500000000",
   whatsappHref: "https://wa.me/972500000000",

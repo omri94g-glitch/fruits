@@ -6,6 +6,8 @@ import { X } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { useDialogA11y } from "@/lib/use-dialog-a11y";
 import { CartItemsList } from "./CartItemsList";
+import { CitySelect } from "./CitySelect";
+import { OrderTotals } from "./OrderTotals";
 import { trackEvent } from "@/lib/analytics";
 
 export function CartDrawer() {
@@ -68,15 +70,11 @@ export function CartDrawer() {
               <CartItemsList />
 
               <div className="flex flex-col gap-4 mt-6">
-                <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="text-ink-muted">עיר משלוח</span>
-                  <input
-                    type="text"
-                    value={delivery.deliveryCity}
-                    onChange={(e) => setDelivery({ deliveryCity: e.target.value })}
-                    className="rounded-xl border border-line px-4 py-2 outline-none focus:ring-1 focus:ring-green-700 bg-cream"
-                  />
-                </label>
+                <CitySelect
+                  value={delivery.deliveryCity}
+                  onChange={(city) => setDelivery({ deliveryCity: city })}
+                  className="rounded-xl border border-line px-4 py-2 outline-none focus:ring-1 focus:ring-green-700 bg-cream"
+                />
                 <label className="flex flex-col gap-1.5 text-sm">
                   <span className="text-ink-muted">תאריך משלוח מבוקש</span>
                   <input
@@ -99,10 +97,7 @@ export function CartDrawer() {
             </div>
 
             <div className="shrink-0 border-t border-line px-5 py-5 flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <span className="text-ink-muted">סה&quot;כ</span>
-                <span className="text-xl font-medium text-ink">{subtotal} ₪</span>
-              </div>
+              <OrderTotals />
               <Link
                 href="/checkout"
                 onClick={close}

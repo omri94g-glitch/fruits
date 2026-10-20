@@ -87,6 +87,10 @@ export default async function AdminOrderDetailPage({
               </div>
             );
           })}
+          <div className="flex items-center justify-between px-4 py-3 text-sm border-b border-line">
+            <span className="text-ink-muted">דמי משלוח</span>
+            <span>{Number(order.deliveryFee)} ₪</span>
+          </div>
           <div className="flex items-center justify-between px-4 py-3 text-sm bg-cream-alt font-medium">
             <span>סה&quot;כ</span>
             <span>{Number(order.totalAmount)} ₪</span>

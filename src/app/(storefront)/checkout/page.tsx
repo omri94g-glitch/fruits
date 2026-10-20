@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useCart } from "@/lib/cart-context";
 import { trackEvent } from "@/lib/analytics";
+import { CitySelect } from "@/components/storefront/CitySelect";
+import { OrderTotals } from "@/components/storefront/OrderTotals";
 
 export default function CheckoutPage() {
-  const { items, subtotal, clear, delivery, setDelivery } = useCart();
+  const { items, subtotal, total, clear, delivery, setDelivery } = useCart();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +26,7 @@ export default function CheckoutPage() {
     setForm((f) => ({ ...f, [key]: e.target.value }));
 
   useEffect(() => {
-    if (items.length > 0) trackEvent("begin_checkout", { value: subtotal, items: items.length });
+    if (items.length > 0) trackEvent("begin_checkout", { value: total, items: items.length });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -100,12 +102,10 @@ export default function CheckoutPage() {
         <Field label="אימייל (לא חובה)" type="email" value={form.email} onChange={update("email")} dir="ltr" autoComplete="email" />
 
         <div className="grid sm:grid-cols-2 gap-4">
-          <Field
-            label="עיר"
+          <CitySelect
             value={delivery.deliveryCity}
-            onChange={(e) => setDelivery({ deliveryCity: e.target.value })}
+            onChange={(city) => setDelivery({ deliveryCity: city })}
             required
-            autoComplete="address-level2"
           />
           <Field label="כתובת למשלוח" value={form.address} onChange={update("address")} required autoComplete="street-address" />
         </div>
@@ -159,9 +159,8 @@ export default function CheckoutPage() {
             </div>
           );
         })}
-        <div className="flex justify-between border-t border-line pt-3 font-medium">
-          <span>סה&quot;כ</span>
-          <span>{subtotal} ₪</span>
+        <div className="border-t border-line pt-3">
+          <OrderTotals />
         </div>
       </div>
     </div>

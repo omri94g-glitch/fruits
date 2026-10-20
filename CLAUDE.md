@@ -417,6 +417,36 @@ photo, no authenticity claim in its copy) has no such constraint — it's
 filled with an example AI photo, `public/images/events-boat-tray.png`, a
 boat-shaped fruit platter, same as any other placeholder slot.
 
+## Delivery fees & zones
+- **Source of truth is `src/lib/delivery.ts`**: two zones with the user's own
+  prices (Oct 2026) — "נתניה והסביבה" ₪40 and "אזור המרכז (ממודיעין ועד
+  השרון)" ₪60 — each with an explicit city list. Before this, delivery fees
+  didn't exist at all: `Order.totalAmount` was items only, so the first real
+  customer (Oct 2026) paid nothing for delivery.
+- **The server is the authority.** `/api/checkout` recomputes the fee from the
+  submitted city via `getDeliveryQuote()`, ignores any fee/total the client
+  sends, stores it in `Order.deliveryFee`, and `totalAmount` (what PayPlus
+  charges) = items + fee. A city not in the list is rejected with
+  `UNSERVED_CITY_MESSAGE` (contact on WhatsApp) rather than silently charged
+  nothing. The stored city is the canonical spelling.
+- **City is a `<select>`, not free text** (`CitySelect.tsx`, used in the quick-
+  order modal, cart drawer, `/cart`, and checkout) so the price is known as soon
+  as a city is picked. `useCart()` exposes `deliveryFee` (null until a valid
+  city is chosen) and `total`; `OrderTotals.tsx` renders the products /
+  delivery / total rows in the drawer, `/cart` and checkout. The quick-order
+  modal's footer says "סה"כ לפני משלוח" on purpose — it's the item price only.
+- **The city lists were drafted by Claude from geography, the prices were the
+  user's.** The list decides who is promised delivery, so treat it as the
+  user's to edit: adding/removing a city is a one-line change in
+  `DELIVERY_ZONES`. Deliberately *not* included (ask before adding): Rishon,
+  Holon, Bat Yam, Rehovot, Nes Ziona, Hadera and anywhere further out.
+- **No "delivery to the whole country" claims anywhere** — the footer,
+  tagline, meta description and FAQ were changed from "לכל הארץ" to the real
+  coverage. Keep new copy consistent with the zones (see the fabrication rule).
+- `Order.deliveryFee` has a `0` default; orders placed before the change keep 0
+  because they really weren't charged one (migration `20261020180000_add_
+  delivery_fee`, additive and safe to apply before the new code is live).
+
 ## RTL specifics
 - Root `<html dir="rtl" lang="he">`. Mixed Latin/number strings (phone, email,
   order numbers, `@handle`) must be wrapped in `dir="ltr"` — otherwise the bidi

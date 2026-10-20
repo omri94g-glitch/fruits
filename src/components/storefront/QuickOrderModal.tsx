@@ -6,6 +6,7 @@ import { useQuickOrder } from "@/lib/quick-order-context";
 import { useCart } from "@/lib/cart-context";
 import { useDialogA11y } from "@/lib/use-dialog-a11y";
 import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
+import { CitySelect } from "./CitySelect";
 import { ADD_ONS } from "@/lib/add-ons";
 
 export function QuickOrderModal() {
@@ -145,16 +146,12 @@ export function QuickOrderModal() {
               </div>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-4">
-              <label className="flex flex-col gap-1.5 text-sm">
-                <span className="text-ink-muted">עיר משלוח</span>
-                <input
-                  type="text"
-                  value={localCity}
-                  onChange={(e) => setLocalCity(e.target.value)}
-                  className="rounded-xl border border-line px-4 py-2 outline-none focus:ring-1 focus:ring-green-700 bg-cream"
-                />
-              </label>
+            <div className="grid sm:grid-cols-2 gap-4 items-start">
+              <CitySelect
+                value={localCity}
+                onChange={setLocalCity}
+                className="rounded-xl border border-line px-4 py-2 outline-none focus:ring-1 focus:ring-green-700 bg-cream"
+              />
               <label className="flex flex-col gap-1.5 text-sm">
                 <span className="text-ink-muted">תאריך משלוח</span>
                 <input
@@ -202,7 +199,7 @@ export function QuickOrderModal() {
 
           <div className="sticky bottom-0 bg-cream border-t border-line px-5 py-4 flex items-center justify-between gap-4">
             <div>
-              <span className="text-xs text-ink-muted block">סה&quot;כ</span>
+              <span className="text-xs text-ink-muted block">סה&quot;כ לפני משלוח</span>
               <span className="text-lg font-medium text-ink">{total} ₪</span>
             </div>
             <button

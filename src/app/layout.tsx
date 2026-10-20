@@ -19,7 +19,7 @@ const davidLibre = David_Libre({
 
 export const metadata: Metadata = {
   title: "Rfruits | מגשי פירות טריים",
-  description: "מגשי פירות טריים, יפים וטעימים - משלוחים לכל הארץ",
+  description: "מגשי פירות טריים, יפים וטעימים - משלוחים בנתניה ובאזור המרכז",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

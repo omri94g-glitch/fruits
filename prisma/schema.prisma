@@ -115,6 +115,9 @@ model Order {
   courierId String?
   courier   AdminUser? @relation(fields: [courierId], references: [id])
 
+  // totalAmount includes deliveryFee. Orders placed before delivery fees
+  // existed keep 0 - they really weren't charged one.
+  deliveryFee Decimal @default(0) @db.Decimal(10, 2)
   totalAmount Decimal @db.Decimal(10, 2)
 
   createdAt DateTime @default(now())

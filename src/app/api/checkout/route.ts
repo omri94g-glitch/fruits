@@ -5,6 +5,7 @@ import { generateOrderNumber } from "@/lib/order-number";
 import { createCardcomPayment, isCardcomConfigured } from "@/lib/payments/cardcom";
 import { createPayPlusPayment, isPayPlusConfigured } from "@/lib/payments/payplus";
 import { getAddOn } from "@/lib/add-ons";
+import { getDeliveryQuote, UNSERVED_CITY_MESSAGE } from "@/lib/delivery";
 
 const checkoutSchema = z.object({
   customer: z.object({
@@ -55,6 +56,11 @@ export async function POST(request: Request) {
 
   const { customer, delivery, items } = parsed.data;
 
+  const deliveryQuote = getDeliveryQuote(delivery.city);
+  if (!deliveryQuote) {
+    return NextResponse.json({ error: UNSERVED_CITY_MESSAGE }, { status: 400 });
+  }
+
   const variants = await db.productVariant.findMany({
     where: { id: { in: items.map((i) => i.variantId) } },
     include: { product: true },
@@ -82,10 +88,11 @@ export async function POST(request: Request) {
     };
   });
 
-  const totalAmount = orderItems.reduce(
+  const itemsTotal = orderItems.reduce(
     (sum, item) => sum + Number(item.unitPrice) * item.quantity,
     0
   );
+  const totalAmount = itemsTotal + deliveryQuote.fee;
 
   let dbCustomer = await db.customer.findFirst({ where: { phone: customer.phone } });
   if (!dbCustomer) {
@@ -99,10 +106,11 @@ export async function POST(request: Request) {
       orderNumber: generateOrderNumber(),
       customerId: dbCustomer.id,
       deliveryAddress: delivery.address,
-      deliveryCity: delivery.city,
+      deliveryCity: deliveryQuote.city,
       deliveryDate: delivery.date ? new Date(delivery.date) : null,
       deliveryTimeSlot: delivery.timeSlot || null,
       cardMessage: delivery.cardMessage || null,
+      deliveryFee: deliveryQuote.fee,
       totalAmount,
       items: { create: orderItems },
       statusHistory: { create: { status: "NEW", changedBy: "customer" } },

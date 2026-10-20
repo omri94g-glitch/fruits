@@ -34,7 +34,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-10 text-sm">
         <div className="flex flex-col items-center md:items-start gap-3 text-center md:text-right">
           <span className="font-serif text-2xl">{siteConfig.name}</span>
-          <p className="text-cream/60">מגשי פירות | אירועים | משלוחים לכל הארץ</p>
+          <p className="text-cream/60">מגשי פירות | אירועים | משלוחים בנתניה ובמרכז</p>
           <div className="flex gap-3 mt-1">
             <a
               href={siteConfig.instagramHref}
