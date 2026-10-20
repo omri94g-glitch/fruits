@@ -450,6 +450,34 @@ boat-shaped fruit platter, same as any other placeholder slot.
   because they really weren't charged one (migration `20261020180000_add_
   delivery_fee`, additive and safe to apply before the new code is live).
 
+## Customers database (admin "לקוחות")
+- **Every checkout already stored a `Customer`** (found/created by phone), even
+  for people who never paid. The admin page `/admin/customers` therefore lists
+  only customers with at least one **PAID** order, and its footnote shows how
+  many orders are still unpaid and not counted. That makes it depend on the
+  PayPlus webhook actually flipping `paymentStatus` to PAID — if the list looks
+  empty after real sales, check the webhook first (its field names were never
+  confirmed against a real delivery; see Payments).
+- **"לקוח קבוע" = 2+ paid orders** (`REGULAR_MIN_ORDERS` at the top of the
+  page; a business call, easy to change). Filters: all / regular / opted in to
+  marketing; search by name or phone (dashes ignored).
+- **Phone is stored normalized** (`src/lib/phone.ts`: digits only, local
+  `05x` format, `+972`/`972` → `0`), and checkout looks customers up by the
+  normalized *or* raw value, so a returning customer isn't split in two by
+  "050-123-4567" vs "+972501234567". Customers saved before this keep their
+  old format until they order again.
+- **Marketing consent is opt-in only.** `Customer.marketingConsent` /
+  `marketingConsentAt` are set solely by the checkout checkbox, which is
+  unchecked by default; an unticked box on a later order never changes an
+  existing customer's consent in either direction. Israeli anti-spam law
+  requires explicit prior consent for marketing messages, so only message
+  customers marked "אישר" — everyone else in the list is a fulfilment record
+  only. The checkbox copy ("אפשר להפסיק בכל עת") is a promise: there must be a
+  working way to opt someone out when they ask. There is no privacy-policy
+  page yet, which the law's notice-at-collection expectations suggest adding.
+- Not built (offered, not requested): CSV export of opted-in customers, a
+  manual opt-out toggle in admin, sending any campaigns.
+
 ## RTL specifics
 - Root `<html dir="rtl" lang="he">`. Mixed Latin/number strings (phone, email,
   order numbers, `@handle`) must be wrapped in `dir="ltr"` — otherwise the bidi

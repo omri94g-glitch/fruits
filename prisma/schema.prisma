@@ -91,6 +91,12 @@ model Customer {
   email     String?
   createdAt DateTime @default(now())
 
+  // Opt-in to marketing messages (Israeli anti-spam law needs explicit prior
+  // consent). Never set automatically - only from the unchecked-by-default
+  // checkbox at checkout; the timestamp is the proof of when it was given.
+  marketingConsent   Boolean   @default(false)
+  marketingConsentAt DateTime?
+
   orders Order[]
 
   @@index([phone])

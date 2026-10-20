@@ -7,12 +7,14 @@ import { useCart } from "@/lib/cart-context";
 import { trackEvent } from "@/lib/analytics";
 import { CitySelect } from "@/components/storefront/CitySelect";
 import { OrderTotals } from "@/components/storefront/OrderTotals";
+import { siteConfig } from "@/lib/site-config";
 
 export default function CheckoutPage() {
   const { items, subtotal, total, clear, delivery, setDelivery } = useCart();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [marketingConsent, setMarketingConsent] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -40,7 +42,7 @@ export default function CheckoutPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          customer: { name: form.name, phone: form.phone, email: form.email },
+          customer: { name: form.name, phone: form.phone, email: form.email, marketingConsent },
           delivery: {
             address: form.address,
             city: delivery.deliveryCity,
@@ -125,6 +127,16 @@ export default function CheckoutPage() {
           value={delivery.cardMessage}
           onChange={(e) => setDelivery({ cardMessage: e.target.value })}
         />
+
+        <label className="flex items-start gap-3 text-sm text-ink cursor-pointer">
+          <input
+            type="checkbox"
+            checked={marketingConsent}
+            onChange={(e) => setMarketingConsent(e.target.checked)}
+            className="mt-0.5 accent-[var(--color-green-700)]"
+          />
+          <span>אשמח לקבל הצעות, הטבות ועדכונים מ-{siteConfig.name}. אפשר להפסיק בכל עת.</span>
+        </label>
 
         {error && (
           <p role="alert" className="text-sm text-red-600">

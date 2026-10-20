@@ -6,6 +6,7 @@ import { createCardcomPayment, isCardcomConfigured } from "@/lib/payments/cardco
 import { createPayPlusPayment, isPayPlusConfigured } from "@/lib/payments/payplus";
 import { getAddOn } from "@/lib/add-ons";
 import { getDeliveryQuote, UNSERVED_CITY_MESSAGE } from "@/lib/delivery";
+import { normalizePhone } from "@/lib/phone";
 
 const checkoutSchema = z.object({
   customer: z.object({
@@ -19,6 +20,7 @@ const checkoutSchema = z.object({
         "מספר הטלפון לא תקין - נדרשות לפחות 9 ספרות"
       ),
     email: z.string().trim().email("כתובת האימייל לא תקינה").optional().or(z.literal("")),
+    marketingConsent: z.boolean().optional(),
   }),
   delivery: z.object({
     address: z.string().trim().min(3, "נא להזין כתובת למשלוח"),
@@ -94,10 +96,30 @@ export async function POST(request: Request) {
   );
   const totalAmount = itemsTotal + deliveryQuote.fee;
 
-  let dbCustomer = await db.customer.findFirst({ where: { phone: customer.phone } });
+  // Match on the normalized phone, or the raw string for customers saved before
+  // normalization existed, so a returning customer isn't duplicated.
+  const phone = normalizePhone(customer.phone);
+  const wantsMarketing = customer.marketingConsent === true;
+
+  let dbCustomer = await db.customer.findFirst({
+    where: { phone: { in: [phone, customer.phone] } },
+  });
   if (!dbCustomer) {
     dbCustomer = await db.customer.create({
-      data: { name: customer.name, phone: customer.phone, email: customer.email || null },
+      data: {
+        name: customer.name,
+        phone,
+        email: customer.email || null,
+        marketingConsent: wantsMarketing,
+        marketingConsentAt: wantsMarketing ? new Date() : null,
+      },
+    });
+  } else if (wantsMarketing && !dbCustomer.marketingConsent) {
+    // Only ever turn consent on from an explicit tick; an unticked box on a
+    // later order must not silently revoke (or grant) anything.
+    dbCustomer = await db.customer.update({
+      where: { id: dbCustomer.id },
+      data: { marketingConsent: true, marketingConsentAt: new Date() },
     });
   }
 
