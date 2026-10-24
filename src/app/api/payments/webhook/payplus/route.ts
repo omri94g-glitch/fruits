@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { recordCouponUse } from "@/lib/coupons";
+import { notifyNewPaidOrder } from "@/lib/order-notify";
 import { getPayPlusTransactionStatus, verifyPayPlusWebhookSignature } from "@/lib/payments/payplus";
 
 // PayPlus posts here after a payment attempt, but neither the payload nor its
@@ -55,7 +56,10 @@ export async function POST(request: Request) {
     await db.orderStatusHistory.create({
       data: { orderId: order.id, status: "CONFIRMED", changedBy: "payplus-webhook" },
     });
-    if (firstTimePaid) await recordCouponUse(order.couponCode);
+    if (firstTimePaid) {
+      await recordCouponUse(order.couponCode);
+      await notifyNewPaidOrder(order.id);
+    }
   } else {
     await db.order.update({
       where: { id: order.id },

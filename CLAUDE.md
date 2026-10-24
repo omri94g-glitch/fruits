@@ -480,6 +480,37 @@ boat-shaped fruit platter, same as any other placeholder slot.
 - Known gaps: no rate limit on the validate endpoint, so a short guessable
   code could be brute-forced; no per-customer "once only" limit (not asked for).
 
+## Order notifications (email to the owner)
+- **What**: when an order's payment is first confirmed, both payment webhooks call
+  `notifyNewPaidOrder()` (`src/lib/order-notify.ts`), which emails the owner one
+  message per order via Resend's HTTP API (no SDK): customer, phone, address,
+  date/slot, card message, items, coupon, delivery fee, total, and a link to the
+  admin order. Content is built by the pure `lib/order-email.ts`, which
+  HTML-escapes every customer-typed field (names/addresses are typed by strangers).
+- **Triggered on PAID, not on order creation** — an order row exists before the
+  customer pays, so creation-time alerts would fire for every abandoned
+  checkout. It runs inside the `firstTimePaid` guard, so a repeated webhook
+  can't send a second email. A failure is caught and logged and must never break
+  the webhook.
+- **Needs the PayPlus webhook to work** (see Payments — its payload shape has
+  never been confirmed against a real delivery). If a real paid order produces
+  no email *and* the order stays "pending payment" in admin, the webhook isn't
+  marking it paid; fix that first. A safety net not built: re-verifying payment
+  from the `/checkout/success` redirect.
+- **Config (env vars on Vercel production)**: `ORDER_NOTIFY_EMAIL` (recipient,
+  comma-separated for several; currently `ram@rfruits.co.il`) and
+  `RESEND_API_KEY` (secret — the owner enters it, never us). Optional
+  `ORDER_NOTIFY_FROM`. Nothing is sent unless both are set. Without
+  `ORDER_NOTIFY_FROM`, mail goes out from Resend's shared `onboarding@resend.dev`,
+  which Resend only lets deliver to the email address the Resend account was
+  created with — so either create the Resend account with the recipient address
+  or verify `rfruits.co.il` in Resend (DNS records go in Vercel DNS, and the
+  SPF must be merged into the single existing `v=spf1 include:_spf.google.com`
+  record, never a second SPF record).
+- **Admin "שליחת התראת בדיקה" button** (bottom of the admin orders page →
+  `POST /api/admin/notifications/test`) sends a sample email so the setup can be
+  confirmed without a real order.
+
 ## Customers database (admin "לקוחות")
 - **Every checkout already stored a `Customer`** (found/created by phone), even
   for people who never paid. The admin page `/admin/customers` therefore lists

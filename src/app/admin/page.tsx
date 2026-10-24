@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { OrderStatus } from "@/generated/prisma/enums";
 import { OrdersTable } from "@/components/admin/OrdersTable";
 import { ORDER_STATUSES } from "@/components/admin/OrderStatusBadge";
+import { TestNotificationButton } from "@/components/admin/TestNotificationButton";
 
 function isOrderStatus(value: string): value is OrderStatus {
   return (Object.values(OrderStatus) as string[]).includes(value);
@@ -78,6 +79,8 @@ export default async function AdminOrdersPage({
       <OrdersTable
         orders={orders.map((o) => ({ ...o, totalAmount: Number(o.totalAmount) }))}
       />
+
+      <TestNotificationButton />
     </div>
   );
 }
